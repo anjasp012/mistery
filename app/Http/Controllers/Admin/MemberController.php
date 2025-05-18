@@ -2,17 +2,28 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\MemberResource;
 
 class MemberController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        return inertia('admin/member/index', [
+            'members' => MemberResource::collection(User::whereRole('MEMBER')
+                ->when($request->has('search'), function ($q) use ($request) {
+                    $search = $request->input('search');
+                    $q->where('username', 'like', "%" . Str::lower(trim($search)) . "%");
+                })
+                ->orderBy('username')
+                ->paginate(10)),
+        ]);
         return inertia('admin/member/index', [
             'members' => User::whereRole('MEMBER')->get()
         ]);
@@ -63,6 +74,8 @@ class MemberController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $member = User::find($id);
+        $member->delete();
+        return back()->with('success', 'Delete Successfuly');
     }
 }

@@ -26,13 +26,13 @@ export default function ClaimCard() {
                 router.reload({ only: ['auth'] })
                 setOpen(true);
                 playSound('win.wav')
+                reset()
             },
             onError: () => {
                 setOpen(true);
                 playSound('error.wav')
             },
         });
-        reset()
     };
 
     return (
