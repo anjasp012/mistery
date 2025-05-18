@@ -47,6 +47,48 @@ export default function index({members} : MembersProps) {
                                     <TableCell>{i}</TableCell>
                                     <TableCell>{member.username}</TableCell>
                                     <TableCell>{member.created_at}</TableCell>
+                                    <TableCell className="text-right">
+                                        <AlertDialog>
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger asChild>
+                                                    <Button variant="ghost" className="float-end h-8 w-8 p-0">
+                                                        <MoreHorizontal className="h-4 w-4" />
+                                                    </Button>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent align="end">
+                                                    <DropdownMenuItem
+                                                        onClick={() => {
+                                                            router.get(`/users/${user.id}/edit`);
+                                                        }}
+                                                    >
+                                                        Ubah
+                                                    </DropdownMenuItem>
+                                                    <AlertDialogTrigger className="w-full">
+                                                        <DropdownMenuItem variant="destructive">Hapus</DropdownMenuItem>
+                                                    </AlertDialogTrigger>
+                                                </DropdownMenuContent>
+                                                <AlertDialogContent>
+                                                    <AlertDialogHeader>
+                                                        <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
+                                                        <AlertDialogDescription>
+                                                            Menghapus user tidak dapat dibatalkan. Ini akan menghapus semua akses data yang terkait
+                                                            dengan user ini.
+                                                        </AlertDialogDescription>
+                                                    </AlertDialogHeader>
+                                                    <AlertDialogFooter>
+                                                        <AlertDialogCancel>Batal</AlertDialogCancel>
+                                                        <AlertDialogAction
+                                                            onClick={() => {
+                                                                router.delete(`/users/${user.id}`);
+                                                            }}
+                                                        >
+                                                            Hapus
+                                                        </AlertDialogAction>
+                                                    </AlertDialogFooter>
+                                                </AlertDialogContent>
+                                            </DropdownMenu>
+                                        </AlertDialog>
+                                    </TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
