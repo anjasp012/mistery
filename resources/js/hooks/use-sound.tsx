@@ -1,14 +1,28 @@
-import { useCallback } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
+import { Howl } from 'howler';
 
-const useSound = () => {
-  const playSound = useCallback((fileName: string) => {
-    if (!fileName) return;
+const useSound = (files: string[] = []) => {
+  const cache = useRef<Record<string, Howl>>({});
 
-    const audio = new Audio(`${fileName}`);
-    audio.currentTime = 0;
-    audio.play().catch((e) => {
-      console.warn('Sound play failed:', e.message);
+  // Preload all sounds
+  useEffect(() => {
+    files.forEach((file) => {
+      if (!cache.current[file]) {
+        cache.current[file] = new Howl({
+          src: [`/${file}`],
+          preload: true,
+        });
+      }
     });
+  }, [files]);
+
+  const playSound = useCallback((file: string) => {
+    const sound = cache.current[file];
+    if (sound) {
+      sound.play();
+    } else {
+      console.warn(`Sound '${file}' not preloaded.`);
+    }
   }, []);
 
   return { playSound };

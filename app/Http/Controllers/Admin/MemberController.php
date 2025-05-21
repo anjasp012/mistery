@@ -7,6 +7,9 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\MemberResource;
+use App\Models\Box;
+use App\Models\Key;
+use App\Models\Prize;
 
 class MemberController extends Controller
 {
@@ -24,9 +27,6 @@ class MemberController extends Controller
                 ->orderBy('username')
                 ->paginate(10)),
         ]);
-        return inertia('admin/member/index', [
-            'members' => User::whereRole('MEMBER')->get()
-        ]);
     }
 
     /**
@@ -34,7 +34,10 @@ class MemberController extends Controller
      */
     public function create()
     {
-        //
+        return inertia('admin/member/create', [
+            'prizes' => Prize::all(),
+            'boxes' => Box::all()
+        ]);
     }
 
     /**
@@ -42,7 +45,28 @@ class MemberController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'user_boxes.*.prize_id' => 'required'
+        ], [
+            'user_boxes.*.prize_id' => 'Prize Field Required'
+        ]);
+
+        $member = User::create([
+            'name' => $request->username,
+            'username' => $request->username,
+        ]);
+        $member->boxes()->createMany($request->user_boxes);
+        $keys = Key::get();
+        $member->keys()->createMany(
+            $keys->map(function ($key) {
+                return [
+                    'key_id' => $key->id,
+                    'amount' => 0,
+                ];
+            })->toArray()
+        );
+
+        return to_route('admin.member.index')->with('success', 'Created Successfuly');
     }
 
     /**

@@ -63,6 +63,10 @@ class HomeController extends Controller
         $userBoxes = UserBox::where('user_id', auth()->user()->id)->where('box_id', $id)->with(['prize'])->select('id', 'is_open', 'prize_id')->get();
         return $userBoxes;
     }
+    public function getPrizeBox($id) {
+        $PrizesBox = UserBox::where('user_id', auth()->user()->id)->where('box_id', $id)->with(['prize'])->select('id', 'prize_id')->inRandomOrder()->get();
+        return $PrizesBox;
+    }
 
     public function getKeys() {
         $userKeys = collect();

@@ -11,7 +11,7 @@ type KlaimForm = {
 };
 
 export default function ClaimCard() {
-    const { playSound } = useSound();
+    const { playSound } = useSound(['win.wav','error.wav']);
     const { themes,flash } = usePage<SharedData>().props;
 
     const [open, setOpen] = useState(false);
@@ -38,7 +38,7 @@ export default function ClaimCard() {
     return (
         <>
             <div data-aos="zoom-in" className="relative w-[30vh] md:w-[42.5vh] mx-auto">
-                <img src="/box-login.png" className="select-none pointer-events-none w-full relative" alt="box" />
+                <img loading='lazy' src="/box-login.png" className="select-none pointer-events-none w-full relative" alt="box" />
                 <form onSubmit={submit} className="absolute top-1/2 inset-x-0 -translate-y-1/2 mx-auto space-y-[1vw] md:space-y-[.5vh] w-[25vh] md:w-[36vh]">
                     <h3 className="font-utama text-center text-[2vh] md:text-[2.9vh] select-none pointer-events-none">Masukan Kode dibawah</h3>
                     <input
@@ -57,7 +57,7 @@ export default function ClaimCard() {
                md:rounded-2xl
                placeholder:italic
                text-xs placeholder:text-xs md:text-lg md:placeholder:text-lg
-               bg-[url('username-password-box.png')] bg-no-repeat"
+               bg-[url('/username-password-box.png')] bg-no-repeat"
                     />
                     <div className="flex">
                         <button disabled={processing} type="submit" className="w-[12vh] md:w-[20vh] mx-auto cursor-pointer group select-none">
@@ -68,7 +68,7 @@ export default function ClaimCard() {
                                     width={'.5vw'}
                                 />
                                 :
-                                <img src={`/storage/${themes.claim_button}`} className="w-full group-hover:saturate-120 group-focus:translate-x-px group-focus:translate-y-px" alt="claim-button" />
+                                <img loading='lazy' src={`/storage/${themes.claim_button}`} className="w-full group-hover:saturate-120 group-focus:translate-x-px group-focus:translate-y-px" alt="claim-button" />
                             }
                         </button>
                     </div>
@@ -77,21 +77,21 @@ export default function ClaimCard() {
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogOverlay className='bg-transparent backdrop-blur-xs' />
                 <DialogContent className="w-[80vw] sm:max-w-[60vh] p-0 border-none [&>button:first-of-type]:hidden bg-transparent shadow-none">
-                    <img src="/box-flash.png" alt="box-flash.png" className='w-full' />
+                    <img loading='lazy' src="/box-flash.png" alt="box-flash.png" className='w-full' />
                     {errors &&
                         <div className='absolute inset-0 flex flex-col justify-center'>
-                                <div className='text-center font-utama text-xl'>{errors.kode}</div>
+                                <div className='text-center font-utama text-xs sm:text-lg w-10/12 mx-auto'>{errors.kode}</div>
                         </div>
                     }
                     {flash.success &&
                         <div className='absolute inset-0 flex flex-col justify-center'>
-                            <img src={`/storage/${flash.success.key.image}`} alt="{flash.success.key.image}" className='w-[30vh] mx-auto' />
+                            <img loading='lazy' src={`/storage/${flash.success.key.image}`} alt="{flash.success.key.image}" className='w-[16vh] sm:w-[30vh] mx-auto' />
                         </div>
                     }
                     {flash.success &&
                         <div className="absolute inset-x-0 bottom-10">
-                            <div className='text-center font-utama text-xl w-[76%] mx-auto italic'>
-                                Selamat <br /> anda mendapaatkan {flash.success.amount} buah Kunci
+                            <div className='text-center font-utama text-xs sm:text-lg w-8/12 mx-auto italic'>
+                                Selamat anda mendapaatkan {flash.success.amount} buah Kunci
                             </div>
                         </div>
                     }

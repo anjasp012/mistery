@@ -7,6 +7,7 @@ type ImageBoxProps = {
 export default function ImageBoxOpened({image} : ImageBoxProps) {
     return (
         <img
+            loading='lazy'
             data-aos="zoom-in"
             src={image}
             alt="opened-box"

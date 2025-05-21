@@ -170,3 +170,27 @@
         }
     }
 }
+.embla {
+    @apply m-auto w-full;
+}
+
+/* viewport */
+.embla__viewport {
+    @apply overflow-hidden;
+}
+
+/* container */
+.embla__container {
+    @apply ms-2 flex gap-[4px] sm:gap-0;
+    touch-action: pan-y pinch-zoom;
+}
+
+/* slide */
+.embla__slide {
+    @apply w-1/5 min-w-0 flex-none transform-gpu px-0;
+}
+
+/* slide item */
+.embla__slide__item {
+    @apply m-auto me-0 flex items-center justify-center select-none sm:me-2 sm:w-9/12;
+}

@@ -4,14 +4,8 @@ import { PuffLoader } from "react-spinners";
 
 import React, { useEffect, useState } from 'react'
 import Box from './box';
-
-type selectedBoxProps = {
-    selectedBox: any;
-};
-
-type openBoxForm = {
-    openedBox: [];
-};
+import useSound from '@/hooks/use-sound';
+import { useBoxStore } from '@/store/box-store';
 
 type boxesProps = {
     id: number;
@@ -19,9 +13,11 @@ type boxesProps = {
 };
 
 
-export default function NineBoxes({ selectedBox }: selectedBoxProps) {
+export default function NineBoxes() {
+     const { playSound } = useSound(['show.wav']);
     const [boxes, setBoxes] = useState<boxesProps[]>([]);
     const [loading, setLoading] = useState(true);
+    const selectedBox = useBoxStore(state => state.selectedBox);
 
     useEffect(() => {
         setLoading(true); // mulai loading
@@ -30,6 +26,7 @@ export default function NineBoxes({ selectedBox }: selectedBoxProps) {
             .then(data => {
                 setBoxes(data);
                 setLoading(false); // selesai loading
+                playSound('show.wav')
             })
             .catch(error => {
                 console.error('Gagal ambil data:', error);
@@ -51,7 +48,7 @@ export default function NineBoxes({ selectedBox }: selectedBoxProps) {
                     <div className="grid grid-cols-3 gap-5 sm:gap-[4vh] w-[95%] sm:w-[83vh] mx-auto mb-3 sm:mb-6">
                         {boxes.map((box, i) => {
                             return (
-                                <Box box={box} i={i} selectedBox={selectedBox}/>
+                                <Box box={box} i={i}/>
                             );
                         })}
 

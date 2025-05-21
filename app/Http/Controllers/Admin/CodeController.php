@@ -2,17 +2,30 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Models\Code;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\CodeResource;
+use App\Models\Key;
+use App\Models\User;
 
 class CodeController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+         return inertia('admin/code-reedem/index', [
+            'codes' => CodeResource::collection(Code::query()
+                ->when($request->has('search'), function ($q) use ($request) {
+                    $search = $request->input('search');
+                    $q->where('code', 'like', "%" . Str::lower(trim($search)) . "%");
+                })
+                ->orderBy('created_at', 'desc')
+                ->paginate(10)),
+        ]);
     }
 
     /**
@@ -20,7 +33,10 @@ class CodeController extends Controller
      */
     public function create()
     {
-        //
+        return inertia('admin/code-reedem/create',[
+            'members' => User::whereRole('MEMBER')->get(),
+            'keys' => Key::all()
+        ]);
     }
 
     /**
@@ -28,7 +44,15 @@ class CodeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'user_id' => 'required',
+            'code' => 'required',
+            'key_id' => 'required',
+            'amount' => 'required',
+        ]);
+
+        Code::create($request->all());
+        return to_route('admin.code-reedem.index')->with('success', 'Created Successfully');
     }
 
     /**

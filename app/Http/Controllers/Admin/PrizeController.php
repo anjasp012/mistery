@@ -2,17 +2,28 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Models\Prize;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\PrizeResource;
 
 class PrizeController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        return inertia('admin/prize/index', [
+            'prizes' => PrizeResource::collection(Prize::query()
+                ->when($request->has('search'), function ($q) use ($request) {
+                    $search = $request->input('search');
+                    $q->where('name', 'like', "%" . Str::lower(trim($search)) . "%");
+                })
+                ->orderBy('name')
+                ->paginate(10)),
+        ]);
     }
 
     /**
@@ -20,7 +31,7 @@ class PrizeController extends Controller
      */
     public function create()
     {
-        //
+        return inertia('admin/prize/create');
     }
 
     /**
@@ -28,7 +39,19 @@ class PrizeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string',
+            'image' => 'nullable|file|image',
+        ]);
+        if ($request->hasFile('image')) {
+            $filename = $request->file('image')->hashName();
+            $image = $request->file('image')->storeAs('prizes', $filename, 'public');
+        }
+        Prize::create([
+            'name' => $request->name,
+            'image' => $image,
+        ]);
+        return to_route('admin.prize.index')->with('success', 'Created Successfuly');
     }
 
     /**
@@ -44,7 +67,9 @@ class PrizeController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return inertia('admin/prize/edit', [
+            'prize' => Prize::find($id)
+        ]);
     }
 
     /**

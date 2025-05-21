@@ -1,16 +1,25 @@
+import { useBoxStore } from '@/store/box-store';
 import { SharedData } from '@/types';
 import { usePage } from '@inertiajs/react';
-import React from 'react'
+import React, { useState } from 'react'
+import { ScaleLoader } from 'react-spinners';
 
-type selectedBoxProps = {
-    setSelectedBox: (boxId: string) => void;
-};
+export default function KembaliButton() {
 
-export default function KembaliButton({ setSelectedBox }: selectedBoxProps) {
+    const [loading, setLoading] = useState(false);
     const { themes } = usePage<SharedData>().props;
+    const setSelectedBox = useBoxStore(state => state.setSelectedBox);
     return (
-        <button data-aos="zoom-in" onClick={() => setSelectedBox('')} type="button" className="mx-auto cursor-pointer group">
-            <img src={`/storage/${themes.back_button}`} className="w-[14vw] md:w-[5vw] group-hover:saturate-120 group-focus:translate-x-px group-focus:translate-y-px" alt="login-button" />
+        <button disabled={loading} data-aos="zoom-in" onClick={() => (setLoading(true), setSelectedBox(''))} type="button" className="mx-auto cursor-pointer group">
+            {loading ?
+            <ScaleLoader
+                    color="rgba(255, 255, 255, 0.8)"
+                    width={2}
+                    height={17}
+                />
+            :
+            <img loading='lazy' src={`/storage/${themes.back_button}`} className="w-[14vw] md:w-[5vw] group-hover:saturate-120 group-focus:translate-x-px group-focus:translate-y-px" alt="back-button" />
+            }
         </button>
     )
 }

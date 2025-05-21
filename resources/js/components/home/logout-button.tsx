@@ -1,13 +1,12 @@
+import { useBoxStore } from '@/store/box-store';
 import { SharedData } from '@/types';
 import { router, useForm, usePage } from '@inertiajs/react';
 import React from 'react';
 import { ScaleLoader } from 'react-spinners';
 
-type SelectedBoxProps = {
-    setSelectedBox: (boxId: string) => void;
-};
+export default function LogoutButton() {
 
-export default function LogoutButton({ setSelectedBox }: SelectedBoxProps) {
+    const setSelectedBox = useBoxStore(state => state.setSelectedBox);
     const { themes } = usePage<SharedData>().props;
     const { post, processing } = useForm();
     const handleLogout = () => {
@@ -31,7 +30,7 @@ export default function LogoutButton({ setSelectedBox }: SelectedBoxProps) {
                     height={17}
                 />
                 :
-                <img
+                <img loading='lazy'
                     src={`/storage/${themes.logout_button}`}
                     className="w-full group-hover:saturate-120 group-focus:translate-x-px group-focus:translate-y-px"
                     alt="logout-button"

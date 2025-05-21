@@ -6,15 +6,16 @@ import ImageBoxOpened from './image-box-opened';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogOverlay, DialogTitle } from '../ui/dialog';
 import { SharedData } from '@/types';
 import useSound from '@/hooks/use-sound';
+import { useBoxStore } from '@/store/box-store';
 
 type BoxProps = {
-    selectedBox: any;
     box: any;
     i: any;
 };
 
-export default function Box({ box, i, selectedBox }: BoxProps) {
-    const { playSound } = useSound();
+export default function Box({ box, i }: BoxProps) {
+     const selectedBox = useBoxStore(state => state.selectedBox);
+    const { playSound } = useSound(['click.wav', 'win.wav', 'hover.wav', 'empty.wav']);
     const { flash } = usePage<SharedData>().props;
     const [open, setOpen] = useState(false);
     const { data, setData, post, processing, errors } = useForm({
@@ -51,6 +52,7 @@ export default function Box({ box, i, selectedBox }: BoxProps) {
                 router.reload({ only: ['auth'] })
                 setData('is_open', true);
                 playSound('win.wav')
+                setOpen(true)
 
                 // setOpen(true)
             },
@@ -66,7 +68,7 @@ export default function Box({ box, i, selectedBox }: BoxProps) {
                 onMouseEnter={() => playSound('hover.wav')}
                 key={i}
                 className={isOpened ? 'pointer-events-none' : 'group'}
-                onClick={!isOpened ? () => openBox() : undefined}
+                onClick={!isOpened ? () => (playSound('click.wav'), openBox()) : undefined}
             >
                 <div
                     data-aos={animation}
@@ -125,25 +127,27 @@ export default function Box({ box, i, selectedBox }: BoxProps) {
             </div>
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogOverlay className='bg-transparent backdrop-blur-xs' />
-                <DialogContent className="w-[80vw] sm:max-w-[60vh] p-0 border-none [&>button:first-of-type]:hidden bg-transparent shadow-none">
-                    <img src="/box-flash.png" alt="box-flash.png" className='w-full' />
-                    {errors &&
-                        <div className='absolute inset-0 flex flex-col justify-center'>
-                            <div className='flex justify-center gap-2 items-center text-center font-utama text-xl'>Kunci <span><img className='w-6' src={`/storage/${errors.key}`} alt={errors.key} /></span> anda habis</div>
-                        </div>
+                <DialogContent className="w-[80vw] sm:max-w-[60vh] p-0 border-none [&>button:first-of-type]:hidden bg-transparent shadow-none focus:outline-none">
+                    {errors.key ? '' :
+                    <img loading='lazy' src={`/storage/${selectedBox.image_box}`} alt="box-flash.png" className='w-[80px] sm:w-[14vh] absolute top-0 end-3 sm:end-4' />
                     }
-                    {flash.success &&
+                    <img loading='lazy' src="/box-flash.png" alt="box-flash.png" className='w-full' />
+                    {errors.key ?
                         <div className='absolute inset-0 flex flex-col justify-center'>
-                            <img src={flash.success?.prize?.image} alt="{flash.success.key.image}" className='w-[30vh] mx-auto' />
+                            <div className='flex justify-center gap-2 items-center text-center font-utama text-xs sm:text-lg'>Kunci <span><img loading='lazy' className='w-4 sm:w-6' src={`/storage/${errors.key}`} alt={errors.key} /></span> anda habis</div>
                         </div>
-                    }
-                    {flash.success &&
-                        <div className="absolute inset-x-0 bottom-10">
-                            <div className='text-center font-utama text-xl w-[76%] mx-auto italic'>
-                                Selamat anda memenangkan {flash.success?.prize?.name}
+                 :
+                 <>
+                        <div className='absolute inset-0 flex flex-col justify-center'>
+                            <img loading='lazy' src={`/storage/${box.prize.image}`} alt={box.prize.image} className='w-30 sm:w-[24vh] mx-auto' />
+                        </div>
+                        <div className="absolute inset-x-0 bottom-5 sm:bottom-10">
+                            <div className='text-center font-utama text-xs sm:text-lg w-[76%] mx-auto italic'>
+                                Selamat anda memenangkan {box.prize.name}
                             </div>
                         </div>
-                    }
+                 </>
+                }
                 </DialogContent>
             </Dialog>
         </>

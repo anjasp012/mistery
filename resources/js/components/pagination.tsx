@@ -26,10 +26,11 @@ import {
     const { current_page, last_page } = pagination;
 
     return (
-      <P className="justify-start">
+      <P className="justify-end">
         <PaginationContent>
           <PaginationItem>
             <PaginationPrevious
+            size={'sm'}
               href={`?page=${Math.max(current_page - 1, 1)}`}
               className={
                 current_page === 1 ? "pointer-events-none opacity-50" : ""
@@ -42,10 +43,11 @@ import {
             return (
               <PaginationItem key={pageNumber}>
                 <PaginationLink
+                size={'sm'}
                   href={`?page=${pageNumber}`}
-                  className={`inline-flex justify-center items-center w-10 h-10 text-sm font-medium whitespace-nowrap rounded-md transition-colors ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
+                  className={`${
                     pageNumber === current_page
-                      ? "border border-muted"
+                      ? "bg-muted"
                       : "hover:bg-muted"
                   }`}
                 >
@@ -57,6 +59,7 @@ import {
 
           <PaginationItem>
             <PaginationNext
+                  size={'sm'}
               href={`?page=${Math.min(current_page + 1, last_page)}`}
               className={
                 current_page === last_page ? "pointer-events-none opacity-50" : ""
