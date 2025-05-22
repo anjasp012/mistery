@@ -62,7 +62,8 @@ class HomeController extends Controller
     }
 
     public function getNineBoxes($id) {
-        $userBoxes = PrizeBox::where('user_box_id', $id)->with(['prize'])->select('id', 'is_open', 'prize_id')->get();
+        $boxes = UserBox::where('user_id', auth()->id())->where('box_id', $id)->first();
+        $userBoxes = PrizeBox::where('user_box_id', $boxes->id)->with(['prize'])->select('id', 'is_open', 'prize_id')->get();
         return $userBoxes;
     }
     public function getPrizeList() {

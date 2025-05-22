@@ -103,7 +103,7 @@ export default function Edit({ member, prizes, boxes }: EditProps) {
                                                 updated[boxIndex].prize_boxes = value
                                                     ? updated[boxIndex].prize_boxes.length
                                                         ? updated[boxIndex].prize_boxes
-                                                        : Array.from({ length: 9 }, () => ({ prize_id: '',is_open: false }))
+                                                        : Array.from({ length: 9 }, () => ({ prize_id: '', is_open: false }))
                                                     : [];
                                                 return { ...prev, user_boxes: updated };
                                             });
@@ -112,53 +112,77 @@ export default function Edit({ member, prizes, boxes }: EditProps) {
                                 </div>
 
                                 <div className="space-y-2">
-                                    {box.is_active ?
-                                        box.prize_boxes?.map((prizeBox, prizeIndex) => (
-                                            <div key={prizeIndex}>
-                                                <div className="flex items-center gap-4 border rounded-lg pe-2">
-                                                    <Select
-
-                                                        value={prizeBox.prize_id ? Number(prizeBox.prize_id) : ''}
-                                                        onValueChange={(value) => {
-                                                            setData((prev) => {
-                                                                const updated = [...prev.user_boxes];
-                                                                if (updated[boxIndex].prize_boxes) {
-                                                                    updated[boxIndex].prize_boxes[prizeIndex].prize_id = Number(value);
-                                                                }
-                                                                return { ...prev, user_boxes: updated };
-                                                            });
-                                                        }}
-                                                    >
-                                                        <SelectTrigger className="w-full border-0">
-                                                            <SelectValue placeholder={`Mistery Box #${prizeIndex + 1}`} />
-                                                        </SelectTrigger>
-                                                        <SelectContent>
-                                                            {prizes.map((prize) => (
-                                                                <SelectItem key={prize.id} value={prize.id}>
-                                                                    {prize.name}
-                                                                </SelectItem>
-                                                            ))}
-                                                        </SelectContent>
-                                                    </Select>
-                                                    <Switch
-                                                        checked={prizeBox.is_open}
-                                                        onCheckedChange={(value) => {
-                                                            setData((prev) => {
-                                                                const updated = [...prev.user_boxes];
-                                                                updated[boxIndex].prize_boxes[prizeIndex].is_open = value;
-                                                                return { ...prev, user_boxes: updated };
-                                                            });
-                                                        }}
-                                                    />
-                                                </div>
-
-                                                {errors[`user_boxes.${boxIndex}.prize_boxes.${prizeIndex}.prize_id`] && (
-                                                    <div className="text-red-500 text-sm">
-                                                        {errors[`user_boxes.${boxIndex}.prize_boxes.${prizeIndex}.prize_id`]}
+                                    {box.is_active ? (
+                                        <>
+                                            {box.prize_boxes?.map((prizeBox, prizeIndex) => (
+                                                <div key={prizeIndex}>
+                                                    <div className="flex items-center gap-4 border rounded-lg pe-2">
+                                                        <Select
+                                                            value={prizeBox.prize_id ? Number(prizeBox.prize_id) : ''}
+                                                            onValueChange={(value) => {
+                                                                setData((prev) => {
+                                                                    const updated = [...prev.user_boxes];
+                                                                    if (updated[boxIndex].prize_boxes) {
+                                                                        updated[boxIndex].prize_boxes[prizeIndex].prize_id = Number(value);
+                                                                    }
+                                                                    return { ...prev, user_boxes: updated };
+                                                                });
+                                                            }}
+                                                        >
+                                                            <SelectTrigger className="w-full border-0">
+                                                                <SelectValue placeholder={`Mistery Box #${prizeIndex + 1}`} />
+                                                            </SelectTrigger>
+                                                            <SelectContent>
+                                                                {prizes.map((prize) => (
+                                                                    <SelectItem key={prize.id} value={prize.id}>
+                                                                        {prize.name}
+                                                                    </SelectItem>
+                                                                ))}
+                                                            </SelectContent>
+                                                        </Select>
+                                                        <Switch
+                                                            checked={prizeBox.is_open}
+                                                            onCheckedChange={(value) => {
+                                                                setData((prev) => {
+                                                                    const updated = [...prev.user_boxes];
+                                                                    updated[boxIndex].prize_boxes[prizeIndex].is_open = value;
+                                                                    return { ...prev, user_boxes: updated };
+                                                                });
+                                                            }}
+                                                        />
                                                     </div>
-                                                )}
-                                            </div>
-                                        )) : ''}
+
+                                                    {errors[`user_boxes.${boxIndex}.prize_boxes.${prizeIndex}.prize_id`] && (
+                                                        <div className="text-red-500 text-sm">
+                                                            {errors[`user_boxes.${boxIndex}.prize_boxes.${prizeIndex}.prize_id`]}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            ))}
+
+                                            <Button
+                                                type='button'
+                                                size="sm"
+                                                variant="destructive"
+                                                className="w-full"
+                                                onClick={() => {
+                                                    setData((prev) => {
+                                                        const updated = [...prev.user_boxes];
+                                                        const prizeBoxes = updated[boxIndex].prize_boxes?.map((pb) => ({
+                                                            ...pb,
+                                                            prize_id: null,
+                                                            is_open: false,
+                                                        }));
+                                                        updated[boxIndex].prize_boxes = prizeBoxes;
+                                                        return { ...prev, user_boxes: updated };
+                                                    });
+                                                }}
+                                            >
+                                                Reset
+                                            </Button>
+                                        </>
+                                    ) : null}
+
                                 </div>
                             </div>
                         ))}
