@@ -72,5 +72,8 @@ class User extends Authenticatable
     public function boxes() {
         return $this->hasMany(UserBox::class);
     }
+    public function histories() {
+        return $this->hasMany(History::class);
+    }
 
 }

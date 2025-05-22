@@ -160,11 +160,7 @@ export default function Create({ boxes, prizes }: CreateProps) {
                                                         </SelectContent>
                                                     </Select>
 
-                                                    {errors[`user_boxes.${boxIndex}.prize_boxes.${prizeIndex}.prize_id`] && (
-                                                        <div className="text-red-500 text-sm">
-                                                            {errors[`user_boxes.${boxIndex}.prize_boxes.${prizeIndex}.prize_id`]}
-                                                        </div>
-                                                    )}
+                                                    <InputError message={errors[`user_boxes.${boxIndex}.prize_boxes.${prizeIndex}.prize_id`]} />
                                                 </div>
                                             ))}
 

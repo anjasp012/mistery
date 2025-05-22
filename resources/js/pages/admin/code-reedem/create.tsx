@@ -76,10 +76,10 @@ export default function Create({ members, keys }: CreateProps) {
                                 ))}
                             </SelectContent>
                         </Select>
+                        <InputError message={errors.user_id} />
                     </div>
                     <div className="grid gap-2">
                         <Label htmlFor="code">Code</Label>
-
                         <Input
                             id="code"
                             className="mt-1 block w-full"
@@ -95,8 +95,8 @@ export default function Create({ members, keys }: CreateProps) {
                     <div className="grid gap-2">
                         <Label htmlFor="Key">Key</Label>
                         <Select
-                        onValueChange={value => setData('key_id', value)}
-                            required
+                            onValueChange={value => setData('key_id', value)}
+
                         >
                             <SelectTrigger className="w-full">
                                 <SelectValue placeholder={`Key`} />
@@ -109,10 +109,10 @@ export default function Create({ members, keys }: CreateProps) {
                                 ))}
                             </SelectContent>
                         </Select>
+                        <InputError message={errors.key_id} />
                     </div>
-                     <div className="grid gap-2">
+                    <div className="grid gap-2">
                         <Label htmlFor="amount">amount</Label>
-
                         <Input
                             id="amount"
                             type='number'

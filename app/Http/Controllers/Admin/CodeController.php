@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\CodeResource;
 use App\Models\Key;
 use App\Models\User;
+use App\Models\UserBox;
 
 class CodeController extends Controller
 {
@@ -51,6 +52,11 @@ class CodeController extends Controller
             'amount' => 'required',
         ]);
 
+        $userBoxes = UserBox::where('key_id', $request->key_id)->with('key')->first();
+        if ($userBoxes->is_active == false) {
+            return back()->withErrors(['key_id'=>'box with key '.$userBoxes->key->name .' not active on this member']);
+        }
+
         Code::create($request->all());
         return to_route('admin.code-reedem.index')->with('success', 'Created Successfully');
     }
@@ -86,6 +92,11 @@ class CodeController extends Controller
             'key_id' => 'required',
             'amount' => 'required',
         ]);
+
+        $userBoxes = UserBox::where('key_id', $request->key_id)->with('key')->first();
+        if ($userBoxes->is_active == false) {
+            return back()->withErrors(['key_id'=>'box with key '.$userBoxes->key->name .' not active on this member']);
+        }
         $code = Code::find($id);
         $code->update($request->all());
         return to_route('admin.code-reedem.index')->with('success', 'Update Successfully');

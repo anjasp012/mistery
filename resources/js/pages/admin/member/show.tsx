@@ -113,12 +113,6 @@ export default function Show({ member, prizes, boxes }: ShowProps) {
                                                         checked={prizeBox.is_open}
                                                     />
                                                 </div>
-
-                                                {errors[`user_boxes.${boxIndex}.prize_boxes.${prizeIndex}.prize_id`] && (
-                                                    <div className="text-red-500 text-sm">
-                                                        {errors[`user_boxes.${boxIndex}.prize_boxes.${prizeIndex}.prize_id`]}
-                                                    </div>
-                                                )}
                                             </div>
                                         )) : ''}
                                 </div>

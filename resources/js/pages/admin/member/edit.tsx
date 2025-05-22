@@ -151,12 +151,7 @@ export default function Edit({ member, prizes, boxes }: EditProps) {
                                                             }}
                                                         />
                                                     </div>
-
-                                                    {errors[`user_boxes.${boxIndex}.prize_boxes.${prizeIndex}.prize_id`] && (
-                                                        <div className="text-red-500 text-sm">
-                                                            {errors[`user_boxes.${boxIndex}.prize_boxes.${prizeIndex}.prize_id`]}
-                                                        </div>
-                                                    )}
+                                                     <InputError className="mt-2" message={errors[`user_boxes.${boxIndex}.prize_boxes.${prizeIndex}.prize_id`]} />
                                                 </div>
                                             ))}
 

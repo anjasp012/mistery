@@ -13,6 +13,7 @@ import KembaliButton from './kembali-button';
 import LinkAktif from './link-aktif';
 import { useBoxStore } from '@/store/box-store';
 import { useHistoryBoxStore } from '@/store/history-box-store';
+import HistoryButton from './history-button';
 
 type RightSideProps = {
     keys: any[];
@@ -52,7 +53,7 @@ export default function RightSide({ boxes, keys }: RightSideProps) {
             <div className="mt-[2vh] md:hidden">
                 {auth.user ? <>
                     <div className="absolute top-3 start-4 z-10">
-                        <LogoutButton />
+                        <HistoryButton />
                     </div>
                     <div className="absolute top-3 end-4 z-10">
                         <LogoutButton />

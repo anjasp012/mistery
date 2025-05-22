@@ -8,6 +8,7 @@ import Silahkan from './silahkan';
 import KembaliButton from './kembali-button';
 import { useBoxStore } from '@/store/box-store';
 import { useHistoryBoxStore } from '@/store/history-box-store';
+import HistoryButton from './history-button';
 
 export default function LeftSide() {
     const { auth,themes } = usePage<SharedData>().props;
@@ -25,7 +26,7 @@ export default function LeftSide() {
                 {auth.user && (
                     <>
                         <div className="absolute top-12 start-11 z-10">
-                            <LogoutButton />
+                            <HistoryButton />
                         </div>
                         <div className="absolute top-12 end-10 z-10">
                             <LogoutButton />

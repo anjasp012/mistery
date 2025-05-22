@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Box;
+use App\Models\History;
 use App\Models\Key;
 use App\Models\Prize;
 use App\Models\PrizeBox;
@@ -61,6 +62,11 @@ class HomeController extends Controller
         return $boxes;
     }
 
+    public function getHistories() {
+        $histories = auth()->user()->histories->load('prize');
+        return $histories;
+    }
+
     public function getNineBoxes($id) {
         $boxes = UserBox::where('user_id', auth()->id())->where('box_id', $id)->first();
         $userBoxes = PrizeBox::where('user_box_id', $boxes->id)->with(['prize'])->select('id', 'is_open', 'prize_id')->get();
@@ -88,14 +94,17 @@ class HomeController extends Controller
     public function openBox($id, $key_id) {
         $userKey = auth()->user()->keys->where('key_id', $key_id)->first();
         if ($userKey->amount == 0) {
-                return back()->withErrors(['key' => $userKey->key->image]);
+            return back()->withErrors(['key' => $userKey->key->image]);
         }
-        $prizeBox = PrizeBox::find($id);
+        $prizeBox = PrizeBox::findOrFail($id);
         $userKey->update([
             'amount' => $userKey->amount - 1
         ]);
         $prizeBox->update([
             'is_open'=> true
+        ]);
+        auth()->user()->histories()->create([
+            'prize_id' => $prizeBox->prize_id
         ]);
         return back();
     }
