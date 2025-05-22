@@ -31,7 +31,7 @@ export default function LogoutButton() {
                 />
                 :
                 <img loading='lazy'
-                    src={`/storage/${themes.logout_button}`}
+                    src={`/storage/${themes.logout_button.file}`}
                     className="w-full group-hover:saturate-120 group-focus:translate-x-px group-focus:translate-y-px"
                     alt="logout-button"
                 />

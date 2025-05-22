@@ -25,12 +25,11 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 type ButtonsProps = {
     buttons: {
-        login_button: string;
-        logout_button: string;
-        claim_button: string;
-        back_button: string;
-        history_button: string;
-    };
+        name: string;
+        slug: string;
+        file: string;
+        is_active: string;
+    }[];
 }
 
 export default function ButtonThemes({ buttons }: ButtonsProps) {
@@ -51,11 +50,9 @@ export default function ButtonThemes({ buttons }: ButtonsProps) {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                                <ButtonForm name={'Login Button'} image={buttons.login_button} />
-                                <ButtonForm name={'Logout Button'} image={buttons.logout_button} />
-                                <ButtonForm name={'Claim Button'} image={buttons.claim_button} />
-                                <ButtonForm name={'Back Button'} image={buttons.back_button} />
-                                <ButtonForm name={'History Button'} image={buttons.history_button} />
+                            {buttons.map((button, i)=> (
+                                <ButtonForm key={i} button={button} />
+                            ))}
                         </TableBody>
                     </Table>
 

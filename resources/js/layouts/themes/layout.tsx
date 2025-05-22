@@ -38,13 +38,23 @@ const sidebarNavItems: NavItem[] = [
         icon: null,
     },
     {
-        title: 'Sound Effect',
-        href: '/admin/themes/sound',
+        title: 'Popup',
+        href: '/admin/themes/popup',
         icon: null,
     },
     {
         title: 'Slider',
         href: '/admin/themes/slider',
+        icon: null,
+    },
+    {
+        title: 'Link',
+        href: '/admin/themes/link',
+        icon: null,
+    },
+    {
+        title: 'Sound Effect',
+        href: '/admin/themes/sound',
         icon: null,
     },
 ];

@@ -16,10 +16,10 @@ return new class extends Migration
     {
         Schema::create('user_boxes', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class);
-            $table->foreignIdFor(Box::class);
-            $table->foreignIdFor(Key::class);
-            $table->boolean('is_open')->default(false);
+            $table->foreignId('user_id')->constrained('users', 'id')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('box_id')->constrained('boxes', 'id')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('key_id')->constrained('keys', 'id')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->boolean('is_active')->default(false);
             $table->timestamps();
         });
     }

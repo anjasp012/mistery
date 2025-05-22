@@ -18,7 +18,7 @@ export default function KembaliButton() {
                     height={17}
                 />
             :
-            <img loading='lazy' src={`/storage/${themes.back_button}`} className="w-[14vw] md:w-[5vw] group-hover:saturate-120 group-focus:translate-x-px group-focus:translate-y-px" alt="back-button" />
+            <img loading='lazy' src={`/storage/${themes.back_button.file}`} className="w-[14vw] md:w-[5vw] group-hover:saturate-120 group-focus:translate-x-px group-focus:translate-y-px" alt="back-button" />
             }
         </button>
     )

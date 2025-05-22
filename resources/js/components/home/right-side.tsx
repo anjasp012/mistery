@@ -35,7 +35,7 @@ export default function RightSide({ boxes, keys }: RightSideProps) {
     return (
         <div className="w-full lg:w-[61.5vw] min-h-screen flex flex-col relative px-4 py-0 bg-right"
             style={{
-                backgroundImage: `url('/storage/${themes.bg_mobile}')`,
+                backgroundImage: `url('/storage/${themes.bg_mobile.file}')`,
                 backgroundSize: 'cover',
             }}
         >
@@ -43,7 +43,7 @@ export default function RightSide({ boxes, keys }: RightSideProps) {
                 {`
       @media (min-width: 64rem) {
         div.bg-right {
-          background-image: url('/storage/${themes.bg_right}') !important;
+          background-image: url('/storage/${themes.bg_right.file}') !important;
         background-size: 100% 100% !important;
         }
       }
@@ -59,8 +59,8 @@ export default function RightSide({ boxes, keys }: RightSideProps) {
                     </div>
 
                 </> : ''}
-                <img loading='lazy' src={`/storage/${themes.second_logo}`} alt="second_logo" className="w-1/4 mx-auto mb-2 select-none pointer-events-none" />
-                <img loading='lazy' src={`/storage/${themes.first_logo}`} alt="first_logo" className="w-1/2 mx-auto select-none pointer-events-none" />
+                <img loading='lazy' src={`/storage/${themes.second_logo.file}`} alt="second_logo" className="w-1/4 mx-auto mb-2 select-none pointer-events-none" />
+                <img loading='lazy' src={`/storage/${themes.first_logo.file}`} alt="first_logo" className="w-1/2 mx-auto select-none pointer-events-none" />
             </div>
 
             {selectedBox ?
@@ -94,17 +94,17 @@ export default function RightSide({ boxes, keys }: RightSideProps) {
             }
             <div className="md:hidden mt-auto mb-[2vh]">
                 <div className="flex flex-row lg:w-full gap-6 justify-center lg:items-center mb-[3vh]">
-                    <a href="http://" target="_blank" rel="noopener noreferrer">
-                        <img loading='lazy' src="lb.png" alt="lb" className="w-[6vh] hover:scale-105 transition-all select-none" />
+                    <a href={themes.main_disini.link} target="_blank" rel="noopener noreferrer">
+                        <img loading='lazy' src={`/storage/${themes.main_disini.file}`} alt={themes.main_disini.name} className="w-[6vh] hover:scale-105 transition-all select-none" />
                     </a>
-                    <a href="http://" target="_blank" rel="noopener noreferrer">
-                        <img loading='lazy' src="wa.png" alt="wa" className="w-[6vh] hover:scale-105 transition-all select-none" />
+                    <a href={themes.chat_disini_wa.link} target="_blank" rel="noopener noreferrer">
+                        <img loading='lazy' src={`/storage/${themes.chat_disini_wa.file}`} alt={themes.chat_disini_wa.name} className="w-[6vh] hover:scale-105 transition-all select-none" />
                     </a>
-                    <a href="http://" target="_blank" rel="noopener noreferrer">
-                        <img loading='lazy' src="lc.png" alt="lc" className="w-[6vh] hover:scale-105 transition-all select-none" />
+                    <a href={themes.chat_disini_live.link} target="_blank" rel="noopener noreferrer">
+                        <img loading='lazy' src={`/storage/${themes.chat_disini_live.file}`} alt={themes.chat_disini_live.name} className="w-[6vh] hover:scale-105 transition-all select-none" />
                     </a>
                 </div>
-                <img loading='lazy' src={`storage/${themes.third_logo}`} className="w-1/2 mx-auto select-none pointer-events-none" alt="18.png" />
+                <img loading='lazy' src={`storage/${themes.third_logo.file}`} className="w-1/2 mx-auto select-none pointer-events-none" alt="18.png" />
             </div>
         </div>
     )

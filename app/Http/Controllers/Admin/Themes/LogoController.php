@@ -13,57 +13,28 @@ class LogoController extends Controller
     public function edit()
     {
         return inertia('admin/themes/logo', [
-            'logos' => Theme::select('first_logo', 'second_logo', 'third_logo', 'google_logo')->first()
+            'logos' => Theme::whereType('LOGO')->get()
         ]);
     }
 
-    public function update(Request $request)
+    public function update(Request $request, $slug)
     {
-        $logo = Theme::first();
+        $logo = Theme::whereSlug($slug)->first();
         $request->validate([
             'name' => 'required|string',
-            'image' => 'nullable|file|image',
+            'file' => 'nullable|file|file',
         ]);
 
-        if ($request->name == 'First Logo') {
-            if ($request->hasFile('image')) {
-                if ($logo->first_logo) {
-                    Storage::disk('public')->delete($logo->first_logo);
-                }
-                $filename = $request->file('image')->hashName(); // nama acak, ekstensi asli
-                $logo->first_logo = $request->file('image')->storeAs('themes', $filename, 'public');
+        if ($request->hasFile('file')) {
+            if ($logo->file) {
+                Storage::disk('public')->delete($logo->file);
             }
-        }
-        if ($request->name == 'Second Logo') {
-            if ($request->hasFile('image')) {
-                if ($logo->second_logo) {
-                    Storage::disk('public')->delete($logo->second_logo);
-                }
-                $filename = $request->file('image')->hashName(); // nama acak, ekstensi asli
-                $logo->second_logo = $request->file('image')->storeAs('themes', $filename, 'public');
-            }
-        }
-        if ($request->name == 'Third Logo') {
-            if ($request->hasFile('image')) {
-                if ($logo->third_logo) {
-                    Storage::disk('public')->delete($logo->third_logo);
-                }
-                $filename = $request->file('image')->hashName(); // nama acak, ekstensi asli
-                $logo->third_logo = $request->file('image')->storeAs('themes', $filename, 'public');
-            }
-        }
-        if ($request->name == 'Google Logo') {
-            if ($request->hasFile('image')) {
-                if ($logo->google_logo) {
-                    Storage::disk('public')->delete($logo->google_logo);
-                }
-                $filename = $request->file('image')->hashName(); // nama acak, ekstensi asli
-                $logo->google_logo = $request->file('image')->storeAs('themes', $filename, 'public');
-            }
+            $filename = $request->file('file')->hashName(); // nama acak, ekstensi asli
+            $logo->file = $request->file('file')->storeAs('themes', $filename, 'public');
         }
 
         $logo->save();
-        Cache::forget('theme_first');
+        Cache::forget('theme');
 
         return back();
     }

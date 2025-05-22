@@ -26,10 +26,11 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 type BackgroundsProps = {
     backgrounds: {
-        bg_left: string;
-        bg_right: string;
-        bg_mobile: string;
-    };
+        name: string;
+        slug: string;
+        file: string;
+        is_active: string;
+    }[];
 }
 
 export default function Background({ backgrounds }: BackgroundsProps) {
@@ -50,9 +51,9 @@ export default function Background({ backgrounds }: BackgroundsProps) {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            <BackgroundForm name={'Background Desktop Left'} image={backgrounds.bg_left} />
-                            <BackgroundForm name={'Background Desktop Right'} image={backgrounds.bg_right} />
-                            <BackgroundForm name={'Background Mobile'} image={backgrounds.bg_mobile} />
+                            {backgrounds.map((background, i) => (
+                                <BackgroundForm key={i} background={background} />
+                            ))}
                         </TableBody>
                     </Table>
 

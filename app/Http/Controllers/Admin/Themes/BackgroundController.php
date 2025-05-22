@@ -13,48 +13,28 @@ class BackgroundController extends Controller
     public function edit()
     {
         return inertia('admin/themes/background', [
-            'backgrounds' => Theme::select('bg_left', 'bg_right', 'bg_mobile')->first()
+            'backgrounds' => Theme::whereType('BACKGROUND')->get()
         ]);
     }
 
-    public function update(Request $request)
+    public function update(Request $request, $slug)
     {
-        $background = Theme::first();
+        $background = Theme::whereSlug($slug)->first();
         $request->validate([
             'name' => 'required|string',
-            'image' => 'nullable|file|image',
+            'file' => 'nullable|file|file',
         ]);
 
-        if ($request->name == 'Background Desktop Left') {
-            if ($request->hasFile('image')) {
-                if ($background->bg_left) {
-                    Storage::disk('public')->delete($background->bg_left);
-                }
-                $filename = $request->file('image')->hashName(); // nama acak, ekstensi asli
-                $background->bg_left = $request->file('image')->storeAs('themes', $filename, 'public');
+        if ($request->hasFile('file')) {
+            if ($background->file) {
+                Storage::disk('public')->delete($background->file);
             }
-        }
-        if ($request->name == 'Background Desktop Right') {
-            if ($request->hasFile('image')) {
-                if ($background->bg_right) {
-                    Storage::disk('public')->delete($background->bg_right);
-                }
-                $filename = $request->file('image')->hashName(); // nama acak, ekstensi asli
-                $background->bg_right = $request->file('image')->storeAs('themes', $filename, 'public');
-            }
-        }
-        if ($request->name == 'Background Mobile') {
-            if ($request->hasFile('image')) {
-                if ($background->bg_mobile) {
-                    Storage::disk('public')->delete($background->bg_mobile);
-                }
-                $filename = $request->file('image')->hashName(); // nama acak, ekstensi asli
-                $background->bg_mobile = $request->file('image')->storeAs('themes', $filename, 'public');
-            }
+            $filename = $request->file('file')->hashName(); // nama acak, ekstensi asli
+            $background->file = $request->file('file')->storeAs('themes', $filename, 'public');
         }
 
         $background->save();
-        Cache::forget('theme_first');
+        Cache::forget('theme');
 
         return back();
     }

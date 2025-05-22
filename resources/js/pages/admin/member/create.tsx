@@ -7,18 +7,24 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout'
 import { BreadcrumbItem } from '@/types';
 import { Link, router, useForm } from '@inertiajs/react';
 import { MoreHorizontal, Plus } from 'lucide-react';
-import React, { FormEventHandler } from 'react'
+import React, { FormEventHandler, useState } from 'react'
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Member',
         href: '/admin/member',
     },
+    {
+        title: 'Create New Member',
+        href: '/admin/member/create',
+    },
+
 ];
 
 type CreateProps = {
@@ -34,18 +40,38 @@ type CreateProps = {
     }[]
 };
 
+type PrizeBox = {
+    prize_id: string | number | null | undefined;
+    [key: string]: any;
+};
+
+type UserBox = {
+    box_id: string;
+    image_box: string;
+    is_active: boolean;
+    prize_boxes?: PrizeBox[];
+    [key: string]: any;
+};
+
+
+
 
 export default function Create({ boxes, prizes }: CreateProps) {
-    const { data, setData, post, errors, processing, recentlySuccessful } = useForm({
+    const initialUserBoxes: UserBox[] = boxes.map((box, i) => ({
+        box_id: box.id,
+        image_box: box.image_box,
+        is_active: i === 0,
+        prize_boxes: i === 0 ? Array.from({ length: 9 }, () => ({ prize_id: '' })) : [],
+    }));
+
+    const { data, setData, post, errors, processing, recentlySuccessful } = useForm<{
+        username: string;
+        user_boxes: UserBox[];
+    }>({
         username: '',
-        user_boxes: boxes.flatMap((box) =>
-            Array.from({ length: 9 }, () => ({
-                box_id: box.id,
-                key_id: box.id,
-                prize_id: ''
-            }))
-        )
+        user_boxes: initialUserBoxes,
     });
+
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
@@ -57,7 +83,7 @@ export default function Create({ boxes, prizes }: CreateProps) {
         <AppLayout breadcrumbs={breadcrumbs}>
             <div className="px-4 py-6 space-y-6">
                 <div className="flex justify-between items-center">
-                    <HeadingSmall title="Add Member" description="Add New Member" />
+                    <HeadingSmall title="Create Member" description="Create New Member" />
                 </div>
                 <form className="space-y-6" onSubmit={submit}>
                     <div className="grid gap-2">
@@ -75,31 +101,50 @@ export default function Create({ boxes, prizes }: CreateProps) {
 
                         <InputError className="mt-2" message={errors.username} />
                     </div>
-                    <div className="grid grid-cols-6 gap-3 items-start">
-                        {boxes.map((box, boxIndex) => {
-                            const start = boxIndex * 9;
-                            const prizesForBox = data.user_boxes.slice(start, start + 9);
-
+                    <div className="grid grid-cols-3 gap-3 items-start">
+                        {data.user_boxes.map((box, boxIndex) => {
                             return (
-                                <div key={box.id} className="grid gap-2">
-                                    <Label htmlFor="prize" className='flex justify-center gap-2'>Prize Box <img src={`/storage/${box.image_box}`} className='w-4' alt={box.image_box} /></Label>
-                                    <div className="space-y-2">
-                                        {prizesForBox.map((prize, prizeIndex) => {
-                                            const globalIndex = start + prizeIndex;
+                                <div key={boxIndex} className="border rounded-md p-3 grid gap-2">
+                                    <div className="flex items-center justify-between">
+                                        <Label htmlFor={`prize-switch-${boxIndex}`} className='flex gap-2'>Prize Box <img src={`/storage/${box.image_box}`} className='w-4' alt={box.image_box} /></Label>
+                                        <Switch
+                                            id={`prize-switch-${boxIndex}`}
+                                            checked={data.user_boxes[boxIndex]?.is_active || false}
+                                            onCheckedChange={(value) => {
+                                                setData((prev) => {
+                                                    const updated = [...prev.user_boxes];
 
-                                            return (
-                                                <div key={globalIndex}>
+                                                    updated[boxIndex].is_active = value;
+
+                                                    // kalau aktif, buat array 9 prize_boxes default
+                                                    if (value) {
+                                                        updated[boxIndex].prize_boxes = Array.from({ length: 9 }, () => ({ prize_id: '' }));
+                                                    } else {
+                                                        // kalau tidak aktif, hapus prize_boxes atau set ke []
+                                                        updated[boxIndex].prize_boxes = [];
+                                                    }
+
+                                                    return { ...prev, user_boxes: updated };
+                                                });
+                                            }}
+                                        />
+
+
+                                    </div>
+                                    <div className="space-y-2">
+                                        {data.user_boxes[boxIndex].is_active &&
+                                            data.user_boxes[boxIndex].prize_boxes?.map((prizeBox, prizeIndex) => (
+                                                <div key={prizeIndex} className="mb-2">
+
                                                     <Select
-                                                        required
-                                                        value={data.user_boxes[globalIndex].prize_id}
+                                                        value={data.user_boxes[boxIndex].prize_boxes[prizeIndex].prize_id}
                                                         onValueChange={(value) => {
                                                             setData((prev) => {
                                                                 const updated = [...prev.user_boxes];
-                                                                updated[globalIndex].prize_id = value;
-                                                                return {
-                                                                    ...prev,
-                                                                    user_boxes: updated,
-                                                                };
+                                                                if (updated[boxIndex].prize_boxes) {
+                                                                    updated[boxIndex].prize_boxes[prizeIndex].prize_id = Number(value);
+                                                                }
+                                                                return { ...prev, user_boxes: updated };
                                                             });
                                                         }}
                                                     >
@@ -108,21 +153,23 @@ export default function Create({ boxes, prizes }: CreateProps) {
                                                         </SelectTrigger>
                                                         <SelectContent>
                                                             {prizes.map((prize) => (
-                                                                <SelectItem key={prize.id} value={String(prize.id)}>
+                                                                <SelectItem key={prize.id} value={prize.id}>
                                                                     {prize.name}
                                                                 </SelectItem>
                                                             ))}
                                                         </SelectContent>
                                                     </Select>
 
-                                                    {errors[`user_boxes.${globalIndex}.prize_id`] && (
+                                                    {errors[`user_boxes.${boxIndex}.prize_boxes.${prizeIndex}.prize_id`] && (
                                                         <div className="text-red-500 text-sm">
-                                                            {errors[`user_boxes.${globalIndex}.prize_id`]}
+                                                            {errors[`user_boxes.${boxIndex}.prize_boxes.${prizeIndex}.prize_id`]}
                                                         </div>
                                                     )}
                                                 </div>
-                                            );
-                                        })}
+                                            ))}
+
+
+
                                     </div>
                                 </div>
                             );

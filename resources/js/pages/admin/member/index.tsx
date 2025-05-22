@@ -63,7 +63,7 @@ export default function Index({ members }: MembersProps) {
                             }}
                         />
                         <Link href='/admin/member/create' className={buttonVariants()}><Plus className="h-4 w-4" />
-                            Add New Member</Link>
+                            Create New Member</Link>
                     </div>
                 </div>
                 <div className="border rounded">
@@ -93,7 +93,14 @@ export default function Index({ members }: MembersProps) {
                                                 <DropdownMenuContent align="end">
                                                     <DropdownMenuItem
                                                         onClick={() => {
-                                                            router.get(`/users/${member.id}/edit`);
+                                                            router.get(`/admin/member/${member.id}`);
+                                                        }}
+                                                    >
+                                                        Show
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem
+                                                        onClick={() => {
+                                                            router.get(`/admin/member/${member.id}/edit`);
                                                         }}
                                                     >
                                                         Edit

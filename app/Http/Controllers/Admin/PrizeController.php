@@ -85,6 +85,12 @@ class PrizeController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $prize = Prize::find($id);
+        try {
+            $prize->delete();
+            return to_route('admin.prize.index')->with('success', 'Delete Successfully');
+        } catch (\Throwable $th) {
+            return to_route('admin.prize.index')->with('error', 'Delete Error');
+        }
     }
 }

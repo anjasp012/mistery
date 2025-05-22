@@ -20,6 +20,7 @@ class CodeResource extends JsonResource
             'key_name'=> $this->key->name,
             'key_image'=> $this->key->image,
             'code'=> $this->code,
+            'amount'=> $this->amount,
             'is_reedem'=> $this->is_reedem,
             'created_at'=> $this->created_at->format('d M Y'),
         ];

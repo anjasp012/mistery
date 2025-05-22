@@ -6,18 +6,12 @@ export interface Flash {
     error?: string;
 }
 export interface Themes {
-    bg_left: string;
-    bg_right: string;
-    bg_mobile: string;
-    first_logo: string;
-    second_logo: string;
-    third_logo: string;
-    google_logo: string;
-    login_button: string;
-    claim_button: string;
-    logout_button: string;
-    back_button: string;
-    history_button: string;
+    [key: string]: {
+        name: string;
+        file: string;
+        link: string;
+        is_active: boolean;
+    };
 }
 
 export interface Auth {

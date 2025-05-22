@@ -13,20 +13,12 @@ return new class extends Migration
     {
         Schema::create('themes', function (Blueprint $table) {
             $table->id();
-            $table->string('bg_left')->nullable();
-            $table->string('bg_right')->nullable();
-            $table->string('bg_mobile')->nullable();
-            $table->string('logo_1')->nullable();
-            $table->string('logo_2')->nullable();
-            $table->string('login_card')->nullable();
-            $table->string('login_button')->nullable();
-            $table->string('logout_button')->nullable();
-            $table->string('claim_card')->nullable();
-            $table->string('claim_button')->nullable();
-            $table->string('back_button')->nullable();
-            $table->string('link_active')->nullable();
-            $table->string('features')->nullable();
-            $table->string('popup')->nullable();
+            $table->string('type');
+            $table->string('name');
+            $table->string('slug')->unique();
+            $table->string('image');
+            $table->string('link')->nullable();
+            $table->boolean('is_active');
             $table->timestamps();
         });
     }

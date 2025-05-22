@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Box;
 use App\Models\Key;
+use App\Models\Prize;
+use App\Models\PrizeBox;
 use App\Models\User;
 use App\Models\UserBox;
 use App\Models\UserKey;
@@ -60,12 +62,12 @@ class HomeController extends Controller
     }
 
     public function getNineBoxes($id) {
-        $userBoxes = UserBox::where('user_id', auth()->user()->id)->where('box_id', $id)->with(['prize'])->select('id', 'is_open', 'prize_id')->get();
+        $userBoxes = PrizeBox::where('user_box_id', $id)->with(['prize'])->select('id', 'is_open', 'prize_id')->get();
         return $userBoxes;
     }
-    public function getPrizeBox($id) {
-        $PrizesBox = UserBox::where('user_id', auth()->user()->id)->where('box_id', $id)->with(['prize'])->select('id', 'prize_id')->inRandomOrder()->get();
-        return $PrizesBox;
+    public function getPrizeList() {
+        $Prizes = Prize::inRandomOrder()->get();
+        return $Prizes;
     }
 
     public function getKeys() {
@@ -82,16 +84,16 @@ class HomeController extends Controller
         return $keys;
     }
 
-    public function openBox($id) {
-        $userBox = auth()->user()->boxes->find($id);
-        $userKey = auth()->user()->keys->where('key_id', $userBox->key_id)->first();
+    public function openBox($id, $key_id) {
+        $userKey = auth()->user()->keys->where('key_id', $key_id)->first();
         if ($userKey->amount == 0) {
                 return back()->withErrors(['key' => $userKey->key->image]);
         }
+        $prizeBox = PrizeBox::find($id);
         $userKey->update([
             'amount' => $userKey->amount - 1
         ]);
-        $userBox->update([
+        $prizeBox->update([
             'is_open'=> true
         ]);
         return back();

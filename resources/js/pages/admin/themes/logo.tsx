@@ -26,11 +26,11 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 type LogosProps = {
     logos: {
-        first_logo: string;
-        second_logo: string;
-        third_logo: string;
-        google_logo: string;
-    };
+        name: string;
+        slug: string;
+        file: string;
+        is_active: string;
+    }[];
 }
 
 export default function LogoThemes({ logos }: LogosProps) {
@@ -51,10 +51,9 @@ export default function LogoThemes({ logos }: LogosProps) {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                                <LogoForm name={'First Logo'} image={logos.first_logo} />
-                                <LogoForm name={'Second Logo'} image={logos.second_logo} />
-                                <LogoForm name={'Third Logo'} image={logos.third_logo} />
-                                <LogoForm name={'Google Logo'} image={logos.google_logo} />
+                            {logos.map((logo, i) => (
+                                <LogoForm key={i} logo={logo} />
+                            ))}
                         </TableBody>
                     </Table>
 

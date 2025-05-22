@@ -68,7 +68,11 @@ class CodeController extends Controller
      */
     public function edit(string $id)
     {
-        //
+         return inertia('admin/code-reedem/edit',[
+            'members' => User::whereRole('MEMBER')->get(),
+            'keys' => Key::all(),
+            'code' => Code::find($id)
+        ]);
     }
 
     /**
@@ -76,7 +80,16 @@ class CodeController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+           $request->validate([
+            'user_id' => 'required',
+            'code' => 'required',
+            'key_id' => 'required',
+            'amount' => 'required',
+        ]);
+        $code = Code::find($id);
+        $code->update($request->all());
+        return to_route('admin.code-reedem.index')->with('success', 'Update Successfully');
+
     }
 
     /**
@@ -84,6 +97,9 @@ class CodeController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $code = Code::find($id);
+        $code->delete();
+        return to_route('admin.code-reedem.index')->with('success', 'Delete Successfully');
+
     }
 }

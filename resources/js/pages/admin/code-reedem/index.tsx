@@ -25,6 +25,7 @@ type Code = {
     key_name: string;
     key_image: string;
     code: string;
+    amount: number;
     is_reedem: boolean;
     created_at: string;
 };
@@ -68,7 +69,7 @@ export default function Index({ codes }: CodeReedemsProps) {
                             }}
                         />
                         <Link href='/admin/code-reedem/create' className={buttonVariants()}><Plus className="h-4 w-4" />
-                            Add New Code</Link>
+                            Create New Code</Link>
                     </div>
                 </div>
                 <div className="border rounded">
@@ -77,8 +78,9 @@ export default function Index({ codes }: CodeReedemsProps) {
                             <TableRow>
                                 <TableHead className='text-center'>#</TableHead>
                                 <TableHead>Member</TableHead>
-                                <TableHead>Key</TableHead>
                                 <TableHead>Code</TableHead>
+                                <TableHead>Key</TableHead>
+                                <TableHead>Amount</TableHead>
                                 <TableHead>Is Reedem</TableHead>
                                 <TableHead>Created at</TableHead>
                                 <TableHead></TableHead>
@@ -89,6 +91,7 @@ export default function Index({ codes }: CodeReedemsProps) {
                                 <TableRow>
                                     <TableCell className='text-center'>{meta.from + i}</TableCell>
                                     <TableCell>{code.member}</TableCell>
+                                    <TableCell>{code.code}</TableCell>
                                     <TableCell>
                                         <div className="flex items-center gap-2">
                                         <img src={`/storage/${code.key_image}`} className='w-5' alt={code.key_image} />
@@ -97,7 +100,7 @@ export default function Index({ codes }: CodeReedemsProps) {
                                         </span>
                                         </div>
                                         </TableCell>
-                                    <TableCell>{code.code}</TableCell>
+                                    <TableCell>{code.amount}</TableCell>
                                     <TableCell>{code.is_reedem ? <Badge>Yes</Badge> : <Badge variant={'destructive'}>No</Badge> }</TableCell>
                                     <TableCell>{code.created_at}</TableCell>
                                     <TableCell className="text-right">
@@ -111,7 +114,7 @@ export default function Index({ codes }: CodeReedemsProps) {
                                                 <DropdownMenuContent align="end">
                                                     <DropdownMenuItem
                                                         onClick={() => {
-                                                            router.get(`/code-reedeem/${code.id}/edit`);
+                                                            router.get(`/admin/code-reedem/${code.id}/edit`);
                                                         }}
                                                     >
                                                         Edit

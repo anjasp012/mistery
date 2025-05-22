@@ -43,7 +43,7 @@ export default function Create({ members, keys }: CreateProps) {
         user_id: '',
         key_id: '',
         code: '',
-        amount: 1,
+        amount: '1',
     });
 
     const submit: FormEventHandler = (e) => {
@@ -56,7 +56,7 @@ export default function Create({ members, keys }: CreateProps) {
         <AppLayout breadcrumbs={breadcrumbs}>
             <div className="px-4 py-6 space-y-6">
                 <div className="flex justify-between items-center">
-                    <HeadingSmall title="Add Code Reedem" description="Add New Code Reedem" />
+                    <HeadingSmall title="Create Code Reedem" description="Create New Code Reedem" />
                 </div>
                 <form className="space-y-6" onSubmit={submit}>
                     <div className="grid gap-2">

@@ -71,7 +71,7 @@ class BoxKeyController extends Controller
 
         $box->save();
         $key->save();
-        Cache::forget('theme_first');
+        Cache::forget('theme');
 
         return back();
     }

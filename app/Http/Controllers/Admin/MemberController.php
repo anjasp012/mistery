@@ -10,6 +10,7 @@ use App\Http\Resources\MemberResource;
 use App\Models\Box;
 use App\Models\Key;
 use App\Models\Prize;
+use Illuminate\Validation\Rule;
 
 class MemberController extends Controller
 {
@@ -46,24 +47,33 @@ class MemberController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'user_boxes.*.prize_id' => 'required'
+            'user_boxes.*.prize_boxes.*.prize_id' => ['required', 'integer', Rule::exists('prizes', 'id')],
         ], [
-            'user_boxes.*.prize_id' => 'Prize Field Required'
+            'user_boxes.*.prize_boxes.*.prize_id' => 'Prize Field Required'
         ]);
+
 
         $member = User::create([
             'name' => $request->username,
             'username' => $request->username,
         ]);
-        $member->boxes()->createMany($request->user_boxes);
-        $keys = Key::get();
+        foreach ($request->user_boxes as $box) {
+            $user_box = $member->boxes()->create([
+                'box_id'    => $box['box_id'],
+                'key_id'    => $box['box_id'],
+                'is_active' => $box['is_active'],
+            ]);
+
+            if ($user_box->is_active && !empty($box['prize_boxes'])) {
+                $user_box->prizes()->createMany($box['prize_boxes']);
+            }
+        }
+
         $member->keys()->createMany(
-            $keys->map(function ($key) {
-                return [
-                    'key_id' => $key->id,
-                    'amount' => 0,
-                ];
-            })->toArray()
+            Key::all()->map(fn($key) => [
+                'key_id' => $key->id,
+                'amount' => 0,
+            ])->toArray()
         );
 
         return to_route('admin.member.index')->with('success', 'Created Successfuly');
@@ -74,7 +84,11 @@ class MemberController extends Controller
      */
     public function show(string $id)
     {
-        //
+        return inertia('admin/member/show', [
+            'prizes' => Prize::all(),
+            'boxes' => Box::all(),
+            'member' => User::with('boxes.prizes.prize')->find($id),
+        ]);
     }
 
     /**
@@ -82,7 +96,11 @@ class MemberController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return inertia('admin/member/edit', [
+            'prizes' => Prize::all(),
+            'boxes' => Box::all(),
+            'member' => User::with('boxes')->find($id),
+        ]);
     }
 
     /**
@@ -90,7 +108,36 @@ class MemberController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $member = User::find($id);
+        $request->validate([
+            'user_boxes.*.prize_boxes.*.prize_id' => ['required', 'integer', Rule::exists('prizes', 'id')],
+        ], [
+            'user_boxes.*.prize_boxes.*.prize_id' => 'Prize Field Required'
+        ]);
+        foreach ($request->user_boxes as $boxData) {
+            $userBox = $member->boxes()->where('id', $boxData['id'])->first();
+            $userBox->update([
+                'is_active' => $boxData['is_active'] ? 1 : 0
+            ]);
+            foreach ($boxData['prize_boxes'] ?? [] as $prizeBox) {
+                if (isset($prizeBox['id'])) {
+                    // Update prize yang sudah ada
+                    $userBox->prizes()->where('id', $prizeBox['id'])->update([
+                        'prize_id' => $prizeBox['prize_id'],
+                        'is_open' => $prizeBox['is_open']
+                    ]);
+                } else {
+                    // Tambah prize baru
+                    $userBox->prizes()->create([
+                        'prize_id' => $prizeBox['prize_id'],
+                        'is_open' => $prizeBox['is_open']
+                    ]);
+                }
+            }
+
+        }
+
+        return to_route('admin.member.index')->with('success', 'Update Successfully');
     }
 
     /**

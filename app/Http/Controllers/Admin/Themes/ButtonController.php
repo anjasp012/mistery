@@ -13,67 +13,28 @@ class ButtonController extends Controller
     public function edit()
     {
         return inertia('admin/themes/button', [
-            'buttons' => Theme::select('login_button', 'logout_button', 'claim_button', 'back_button', 'history_button')->first()
+            'buttons' => Theme::whereType('BUTTON')->get()
         ]);
     }
 
-    public function update(Request $request)
+    public function update(Request $request, $slug)
     {
-        $button = Theme::first();
+        $button = Theme::whereSlug($slug)->first();
         $request->validate([
             'name' => 'required|string',
-            'image' => 'nullable|file|image',
+            'file' => 'nullable|file|file',
         ]);
 
-        if ($request->name == 'Login Button') {
-            if ($request->hasFile('image')) {
-                if ($button->login_button) {
-                    Storage::disk('public')->delete($button->login_button);
-                }
-                $filename = $request->file('image')->hashName(); // nama acak, ekstensi asli
-                $button->login_button = $request->file('image')->storeAs('themes', $filename, 'public');
+        if ($request->hasFile('file')) {
+            if ($button->file) {
+                Storage::disk('public')->delete($button->file);
             }
-        }
-        if ($request->name == 'Logout Button') {
-            if ($request->hasFile('image')) {
-                if ($button->logout_button) {
-                    Storage::disk('public')->delete($button->logout_button);
-                }
-                $filename = $request->file('image')->hashName(); // nama acak, ekstensi asli
-                $button->logout_button = $request->file('image')->storeAs('themes', $filename, 'public');
-            }
-        }
-        if ($request->name == 'Claim Button') {
-            if ($request->hasFile('image')) {
-                if ($button->claim_button) {
-                    Storage::disk('public')->delete($button->claim_button);
-                }
-                $filename = $request->file('image')->hashName(); // nama acak, ekstensi asli
-                $button->claim_button = $request->file('image')->storeAs('themes', $filename, 'public');
-            }
-        }
-        if ($request->name == 'Back Button') {
-            if ($request->hasFile('image')) {
-                if ($button->back_button) {
-                    Storage::disk('public')->delete($button->back_button);
-                }
-                $filename = $request->file('image')->hashName(); // nama acak, ekstensi asli
-                $button->back_button = $request->file('image')->storeAs('themes', $filename, 'public');
-            }
-        }
-        if ($request->name == 'History Button') {
-            if ($request->hasFile('image')) {
-                if ($button->history_button) {
-                    Storage::disk('public')->delete($button->history_button);
-                }
-                $filename = $request->file('image')->hashName(); // nama acak, ekstensi asli
-                $button->history_button = $request->file('image')->storeAs('themes', $filename, 'public');
-            }
+            $filename = $request->file('file')->hashName(); // nama acak, ekstensi asli
+            $button->file = $request->file('file')->storeAs('themes', $filename, 'public');
         }
 
         $button->save();
-        Cache::forget('theme_first');
-
+        Cache::forget('theme');
         return back();
     }
 }

@@ -7,11 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class UserBox extends Model
 {
     protected $guarded = ['id'];
+
+    protected $with = 'prizes';
+
     protected $casts = [
         'box_opened' => 'array',
     ];
 
-    public function prize() {
-        return $this->belongsTo(Prize::class, 'prize_id', 'id');
+    public function prizes() {
+        return $this->hasMany(PrizeBox::class);
     }
 }
