@@ -99,7 +99,7 @@ class MemberController extends Controller
         return inertia('admin/member/edit', [
             'prizes' => Prize::all(),
             'boxes' => Box::all(),
-            'member' => User::with('boxes')->find($id),
+            'member' => User::with('boxes.prizes')->find($id),
         ]);
     }
 

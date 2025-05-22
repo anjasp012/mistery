@@ -49,6 +49,8 @@ type EditProps = {
 };
 
 export default function Edit({ member, prizes, boxes }: EditProps) {
+    console.log(member);
+
     const { data, setData, put, errors } = useForm({
         username: member.username,
         user_boxes: boxes.map((box) => {
