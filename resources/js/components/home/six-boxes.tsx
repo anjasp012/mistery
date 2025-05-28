@@ -5,6 +5,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import useSound from '@/hooks/use-sound';
 import { useBoxStore } from '@/store/box-store';
 import { useHistoryBoxStore } from '@/store/history-box-store';
+import SpriteCanvas from '../sprite';
 
 type SixBoxesProps = {
     boxes: any[];
@@ -15,7 +16,7 @@ export default function sixBoxes({ boxes }: SixBoxesProps) {
     const [loadingOpenList, setLoadingOpenList] = useState(false);
     const [openList, setOpenList] = useState(false);
 
-    const { auth,themes } = usePage<SharedData>().props;
+    const { auth, themes } = usePage<SharedData>().props;
     const { playSound } = useSound([`storage/${themes.sound_click.file}`, `storage/${themes.sound_hover.file}`, `storage/${themes.sound_empty.file}`, `storage/${themes.sound_show.file}`]);
     const [open, setOpen] = useState(false);
     const setSelectedBox = useBoxStore(state => state.setSelectedBox);
@@ -53,8 +54,12 @@ export default function sixBoxes({ boxes }: SixBoxesProps) {
 
                             <img loading='lazy' src={`/storage/${themes.box_hover_card.file}`} alt={themes.box_hover_card.name} className="w-full scale-117 absolute transition-all duration-100 opacity-0 group-hover:opacity-100 select-none pointer-events-none ease-in-ease-out" />
 
-
-                            <img loading='lazy' src={`/storage/${box.image_box}`} className="w-full px-3 pt-4 sm:px-7 sm:pt-10 relative select-none pointer-events-none" alt={box.image_box} />
+                            <div
+                                className={`pe-2 pt-6 transition-[padding] duration-500 ease-in-out relative z-9999 select-none pointer-events-none`}
+                            >
+                                <SpriteCanvas drawFrameIndex={0} imageSrc={`/storage/${box.image_box}`} />
+                            </div>
+                            {/* <img loading='lazy' src={`/storage/${box.image_box}`} className="w-full px-3 pt-4 sm:px-7 sm:pt-10 relative select-none pointer-events-none" alt={box.image_box} /> */}
                             <h5
                                 className={`text-white absolute inset-x-0 -bottom-[14px] sm:-bottom-[3vh] font-utama text-[8px] md:text-[2vh] text-center transition-all duration-100 group-hover:scale-105 group-hover:translate-y-px group-hover:font-kedua select-none pointer-events-none`}
                             >

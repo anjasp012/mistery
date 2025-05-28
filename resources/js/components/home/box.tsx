@@ -16,6 +16,7 @@ type BoxProps = {
 };
 
 export default function Box({ box, key_id, i }: BoxProps) {
+
     const { themes } = usePage<SharedData>().props;
     const selectedBox = useBoxStore(state => state.selectedBox);
     const { playSound } = useSound([`storage/${themes.sound_click.file}`, `storage/${themes.sound_win.file}`, `storage/${themes.sound_hover.file}`, `storage/${themes.sound_empty.file}`]);
@@ -122,7 +123,7 @@ export default function Box({ box, key_id, i }: BoxProps) {
                             } transition-[padding] duration-500 ease-in-out relative z-9999 select-none pointer-events-none ${processing && 'blur-sm'
                             }`}
                     >
-                        <SpriteCanvas onAnimationStart={handleAnimationStart} onAnimationEnd={handleAnimationEnd} drawFrameIndex={isOpened ? 3 : 0} ref={canvasRef} imageSrc="/spritesheet.png" />
+                        <SpriteCanvas onAnimationStart={handleAnimationStart} onAnimationEnd={handleAnimationEnd} drawFrameIndex={isOpened ? 3 : 0} ref={canvasRef} imageSrc={`/storage/${selectedBox.image_box}`} />
                     </div>
 
                     <h5
@@ -146,7 +147,12 @@ export default function Box({ box, key_id, i }: BoxProps) {
                         <img loading='lazy' src={`/storage/${themes.popup_error.file}`} alt={themes.popup_error.name} className='w-full' />
                         :
                         <>
-                            <img loading='lazy' src={`/storage/${selectedBox.image_box}`} alt="box-flash.png" className='w-[80px] sm:w-[14vh] absolute top-0 end-3 sm:end-4' />
+                        <div
+                            className={`w-[80px] sm:w-[18vh] transition-[padding] duration-500 ease-in-out absolute top-0 end-3 sm:end-1 z-9999 select-none pointer-events-none`}
+                        >
+                            <SpriteCanvas drawFrameIndex={0} imageSrc={`/storage/${selectedBox.image_box}`} />
+                        </div>
+                            {/* <img loading='lazy' src={`/storage/${selectedBox.image_box}`} alt="box-flash.png" className='w-[80px] sm:w-[14vh] absolute top-0 end-3 sm:end-4' /> */}
                             <img loading='lazy' src={`/storage/${themes.popup_win.file}`} alt={themes.popup_win.name} className='w-full' />
                         </>
                     }

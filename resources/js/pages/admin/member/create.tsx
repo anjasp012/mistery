@@ -1,6 +1,7 @@
 import HeadingSmall from '@/components/heading-small';
 import InputError from '@/components/input-error';
 import Pagination from '@/components/pagination';
+import SpriteCanvas from '@/components/sprite';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -106,7 +107,14 @@ export default function Create({ boxes, prizes }: CreateProps) {
                             return (
                                 <div key={boxIndex} className="border rounded-md p-3 grid gap-2">
                                     <div className="flex items-center justify-between">
-                                        <Label htmlFor={`prize-switch-${boxIndex}`} className='flex gap-2'>Prize Box <img src={`/storage/${box.image_box}`} className='w-4' alt={box.image_box} /></Label>
+                                        <Label htmlFor={`prize-switch-${boxIndex}`} className='flex gap-2'>
+                                            Prize Box
+                                            <div
+                            className={`w-4 h-auto transition-[padding] duration-500 ease-in-out relative z-9999 select-none pointer-events-none`}
+                        >
+                            <SpriteCanvas drawFrameIndex={0} imageSrc={`/storage/${box.image_box}`} />
+                        </div>
+                                        </Label>
                                         <Switch
                                             id={`prize-switch-${boxIndex}`}
                                             checked={data.user_boxes[boxIndex]?.is_active || false}

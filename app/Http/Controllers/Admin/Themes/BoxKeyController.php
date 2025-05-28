@@ -54,13 +54,6 @@ class BoxKeyController extends Controller
             $filename = $request->file('image_box')->hashName(); // nama acak, ekstensi asli
             $box->image_box = $request->file('image_box')->storeAs('themes', $filename, 'public');
         }
-        if ($request->hasFile('image_box_opened')) {
-            if ($box->image_box_opened) {
-                Storage::disk('public')->delete($box->image_box_opened);
-            }
-            $filename = $request->file('image_box_opened')->hashName(); // nama acak, ekstensi asli
-            $box->image_box_opened = $request->file('image_box_opened')->storeAs('themes', $filename, 'public');
-        }
         if ($request->hasFile('image_key')) {
             if ($key->image) {
                 Storage::disk('public')->delete($key->image);

@@ -5,9 +5,10 @@ import Autoplay from 'embla-carousel-autoplay'
 import useEmblaCarousel from 'embla-carousel-react'
 import { EmblaOptionsType } from "embla-carousel";
 import { useHistoryBoxStore } from "@/store/history-box-store";
+import SpriteCanvas from "../sprite";
 
 export default function VoucherCard({ keys }: any[]) {
-    const { auth,themes } = usePage<SharedData>().props;
+    const { auth, themes } = usePage<SharedData>().props;
     const options: EmblaOptionsType = { loop: true }
     const historySelectedBox = useHistoryBoxStore(state => state.historySelectedBox);
     const [emblaRef, emblaApi] = useEmblaCarousel(options, [Autoplay()])
@@ -19,7 +20,11 @@ export default function VoucherCard({ keys }: any[]) {
             <div className="absolute top-1/2 -translate-y-1/2">
                 <div className="grid grid-cols-6 md:grid-cols-12 mx-auto gap-6 sm:gap-8 items-center overflow-hidden w-[95%]">
                     <div className="col-span-2 md:col-span-4">
-                        <img loading="lazy" src={`/storage/${historySelectedBox.image_box_opened}`} className="w-full select-none pointer-events-none" alt="silver-2" />
+                        <div
+                            className={`w-full transition-[padding] duration-500 ease-in-out relative z-9999 select-none pointer-events-none`}
+                        >
+                            <SpriteCanvas drawFrameIndex={3} imageSrc={`/storage/${historySelectedBox.image_box}`} />
+                        </div>
                     </div>
                     <div className="col-span-4 md:col-span-8">
                         <div className="flex flex-col g-0">
@@ -27,40 +32,40 @@ export default function VoucherCard({ keys }: any[]) {
                                 <img loading="lazy" src={`/storage/${themes.slider_overlay_card.file}`} className="w-full h-full select-none pointer-events-none" alt="kotak-gacha.png" />
                                 <div className="absolute inset-0 h-full w-full flex px-3">
                                     <div className="embla">
-                                    <div className="embla__viewport" ref={emblaRef}>
-                                        <div className="embla__container">
-                                            <div className="embla__slide">
-                                                <div className="embla__slide__item">
-                                                    <img src="/Voucher.png" alt="Voucher.png" className="w-full" />
+                                        <div className="embla__viewport" ref={emblaRef}>
+                                            <div className="embla__container">
+                                                <div className="embla__slide">
+                                                    <div className="embla__slide__item">
+                                                        <img src="/Voucher.png" alt="Voucher.png" className="w-full" />
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div className="embla__slide">
-                                                <div className="embla__slide__item">
-                                                    <img src="/Voucher.png" alt="Voucher.png" className="w-full" />
+                                                <div className="embla__slide">
+                                                    <div className="embla__slide__item">
+                                                        <img src="/Voucher.png" alt="Voucher.png" className="w-full" />
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div className="embla__slide">
-                                                <div className="embla__slide__item">
-                                                    <img src="/Voucher.png" alt="Voucher.png" className="w-full" />
+                                                <div className="embla__slide">
+                                                    <div className="embla__slide__item">
+                                                        <img src="/Voucher.png" alt="Voucher.png" className="w-full" />
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div className="embla__slide">
-                                                <div className="embla__slide__item">
-                                                    <img src="/Voucher.png" alt="Voucher.png" className="w-full" />
+                                                <div className="embla__slide">
+                                                    <div className="embla__slide__item">
+                                                        <img src="/Voucher.png" alt="Voucher.png" className="w-full" />
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div className="embla__slide">
-                                                <div className="embla__slide__item">
-                                                    <img src="/Voucher.png" alt="Voucher.png" className="w-full" />
+                                                <div className="embla__slide">
+                                                    <div className="embla__slide__item">
+                                                        <img src="/Voucher.png" alt="Voucher.png" className="w-full" />
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div className="embla__slide">
-                                                <div className="embla__slide__item">
-                                                    <img src="/Voucher.png" alt="Voucher.png" className="w-full" />
+                                                <div className="embla__slide">
+                                                    <div className="embla__slide__item">
+                                                        <img src="/Voucher.png" alt="Voucher.png" className="w-full" />
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
                                     </div>
                                 </div>
                             </div>

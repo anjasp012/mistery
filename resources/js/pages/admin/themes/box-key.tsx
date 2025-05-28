@@ -47,7 +47,6 @@ export default function BoxKeyThemes({ boxeskeys }: BoxKeyProps) {
                             <TableRow>
                                 <TableHead>Box & Key Name</TableHead>
                                 <TableHead>Image Box</TableHead>
-                                <TableHead>Image Box Opened</TableHead>
                                 <TableHead>Image Key</TableHead>
                                 <TableHead></TableHead>
                             </TableRow>

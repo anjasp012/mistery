@@ -10,7 +10,6 @@ import { Dialog, DialogContent, DialogOverlay } from './ui/dialog';
 type BoxKeyForm = {
     name: string;
     image_box: File | null;
-    image_box_opened: File | null;
     image_key: File | null;
     _method: string;
 }
@@ -22,7 +21,6 @@ export default function BoxKeyForm({ boxkey }: any) {
     const { data, setData, post, errors, processing } = useForm<BoxKeyForm>({
         name: boxkey.name,
         image_box: null,
-        image_box_opened: null,
         image_key: null,
         _method: 'patch'
     });
@@ -37,7 +35,6 @@ export default function BoxKeyForm({ boxkey }: any) {
                 setData({
                     name: boxkey.name,
                     image_box: null,
-                    image_box_opened: null,
                     image_key: null,
                     _method: 'patch'
                 });
@@ -60,10 +57,6 @@ export default function BoxKeyForm({ boxkey }: any) {
                         <InputError className="mt-2" message={errors.image_box} />
                     </TableCell>
                     <TableCell>
-                        <Input type='file' onChange={e => setData('image_box_opened', e.target.files?.[0] || null)} />
-                        <InputError className="mt-2" message={errors.image_box_opened} />
-                    </TableCell>
-                    <TableCell>
                         <Input type='file' onChange={e => setData('image_key', e.target.files?.[0] || null)} />
                         <InputError className="mt-2" message={errors.image_key} />
                     </TableCell>
@@ -79,10 +72,8 @@ export default function BoxKeyForm({ boxkey }: any) {
                     <TableRow>
                         <TableCell>{boxkey.name}</TableCell>
                         <TableCell><img onClick={e => {setOpen(true)
-                             setImageDialog(`/storage/${boxkey.image_box}`)} } className='w-10' src={`/storage/${boxkey.image_box}`} alt={boxkey.image_box} /></TableCell>
-                        <TableCell><img onClick={e => {setOpen(true)
-                             setImageDialog(`/storage/${boxkey.image_box_opened}`)} } className='w-10' src={`/storage/${boxkey.image_box_opened}`} alt={boxkey.image_box_opened} /></TableCell>
-                        <TableCell><img onClick={e => {setOpen(true)
+                             setImageDialog(`/storage/${boxkey.image_box}`)} } className='w-50' src={`/storage/${boxkey.image_box}`} alt={boxkey.image_box} /></TableCell>
+                         <TableCell><img onClick={e => {setOpen(true)
                              setImageDialog(`/storage/${boxkey.image_key}`)} } className='w-10' src={`/storage/${boxkey.image_key}`} alt={boxkey.image_key} /></TableCell>
                         <TableCell><Button onClick={(e) => setEdit(true)} size="sm"><Pencil /></Button></TableCell>
                     </TableRow>
