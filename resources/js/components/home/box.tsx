@@ -81,6 +81,7 @@ export default function Box({ box, key_id, i }: BoxProps) {
 
     const handleSpinerEnd = () => {
         setOpen(true)
+        setOpenSlide(false)
         playSound(`storage/${themes.sound_win.file}`)
     };
 
@@ -144,10 +145,10 @@ export default function Box({ box, key_id, i }: BoxProps) {
             </div>
            <Dialog open={openSlide} onOpenChange={setOpenSlide}>
                 <DialogOverlay className='bg-transparent backdrop-blur-xs' />
-                <DialogContent className='sm:max-w-7xl'>
+                <DialogContent className='sm:max-w-7xl [&>button:first-of-type]:hidden'>
                     <div className="relative">
-                    <Spiner onSpinerEnd={handleSpinerEnd} setOpenSlide={setOpenSlide}/>
-                    <div className="absolute top-1/2 -translate-y-1/2 start-1/2 -translate-x-1/2 w-62 h-full border border-white"></div>
+                    <Spiner onSpinerEnd={handleSpinerEnd}/>
+                    <div className="absolute top-1/2 -translate-y-1/2 start-1/2 -translate-x-1/2 w-20 sm:w-62 h-full border border-white"></div>
                     </div>
                 </DialogContent>
             </Dialog>

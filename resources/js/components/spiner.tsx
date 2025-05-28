@@ -6,7 +6,7 @@ import useSound from '@/hooks/use-sound';
 import { usePage } from '@inertiajs/react';
 import { SharedData } from '@/types';
 
-export default function Spiner({onSpinerEnd, setOpenSlide}) {
+export default function Spiner({onSpinerEnd}) {
     const { themes } = usePage<SharedData>().props;
      const { playSound } = useSound([`storage/${themes.sound_click.file}`, `storage/${themes.sound_win.file}`, `storage/${themes.sound_hover.file}`, `storage/${themes.sound_empty.file}`]);
 
@@ -41,7 +41,6 @@ export default function Spiner({onSpinerEnd, setOpenSlide}) {
             const slowScrollToTarget = () => {
                 if (step >= stepsToTarget) {
                     onSpinerEnd()
-                    setOpenSlide(false)
                     return
                 }
 
@@ -52,7 +51,7 @@ export default function Spiner({onSpinerEnd, setOpenSlide}) {
             }
 
             slowScrollToTarget()
-        }, 4000)
+        }, 40000)
 
         return () => {
             clearTimeout(autoplayStopTimeout)
@@ -61,25 +60,27 @@ export default function Spiner({onSpinerEnd, setOpenSlide}) {
     }, [emblaApi])
 
     return (
-        <div className="embla pointer-events-none select-none">
-            <div className="embla__viewport" ref={emblaRef}>
-                <div className="embla__container">
-                    {[...Array(10)].map((_, i) => (
-                        <div key={i} className="embla__slide">
-                            <div className="mx-4 text-center">
-                                <div>
-                                    <img
-                                        src="/Voucher.png"
-                                        alt={`Voucher ${i + 1}`}
-                                        className="w-full block"
-                                    />
-                                    {i === 6 ? <div className='block'>oke</div> : ''}
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
+        <div className="m-auto w-full pointer-events-none select-none">
+  <div className="overflow-hidden" ref={emblaRef}>
+    <div className="flex">
+      {[...Array(10)].map((_, i) => (
+        <div
+          key={i}
+          className="flex-none px-2 md:px-4 w-1/3 md:w-1/5"
+        >
+          <div className="text-center">
+            <img
+              src="/Voucher.png"
+              alt={`Voucher ${i + 1}`}
+              className="w-full block"
+            />
+            {i === 6 && <div className="block">oke</div>}
+          </div>
         </div>
+      ))}
+    </div>
+  </div>
+</div>
+
     )
 }
