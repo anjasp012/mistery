@@ -1,5 +1,5 @@
 import { router, useForm, usePage } from '@inertiajs/react';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import AOS from 'aos';
 import { MoonLoader, RiseLoader } from 'react-spinners';
 import ImageBoxOpened from './image-box-opened';
@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogOverlay, 
 import { SharedData } from '@/types';
 import useSound from '@/hooks/use-sound';
 import { useBoxStore } from '@/store/box-store';
+import SpriteCanvas, { SpriteCanvasRef } from '../sprite';
 
 type BoxProps = {
     box: any;
@@ -23,6 +24,9 @@ export default function Box({ box, key_id, i }: BoxProps) {
         is_open: box.is_open,
         key: null
     });
+    // Tambahkan di atas
+    const canvasRef = useRef<SpriteCanvasRef>(null);
+
 
 
     const aosAnimations = [
@@ -51,9 +55,9 @@ export default function Box({ box, key_id, i }: BoxProps) {
             preserveScroll: true,
             onSuccess: () => {
                 router.reload({ only: ['auth'] })
-                setData('is_open', true);
+                canvasRef.current?.start();
                 playSound(`storage/${themes.sound_win.file}`)
-                setOpen(true)
+
 
                 // setOpen(true)
             },
@@ -63,6 +67,20 @@ export default function Box({ box, key_id, i }: BoxProps) {
             }
         });
     };
+
+    const [hasAnimated, setHasAnimated] = useState(isOpened);
+
+    const handleAnimationStart = () => {
+        setHasAnimated(true);
+    };
+
+  const handleAnimationEnd = () => {
+    setTimeout(() => {
+        setData('is_open', true);
+        setOpen(true);
+    }, 300);
+};
+
     return (
         <>
             <div
@@ -84,7 +102,6 @@ export default function Box({ box, key_id, i }: BoxProps) {
                                 alt={themes.box_hover_card.name}
                                 className="w-full scale-117 absolute pointer-events-none ease-in-ease-out select-none pointer-events-none"
                             />
-                            <ImageBoxOpened image={`/storage/${selectedBox.image_box_opened}`} />
                         </>
                     ) : (
                         <>
@@ -98,19 +115,15 @@ export default function Box({ box, key_id, i }: BoxProps) {
                                 alt={themes.box_hover_card.name}
                                 className="w-full scale-117 absolute transition-all duration-100 opacity-0 group-hover:opacity-100 pointer-events-none ease-in-ease-out select-none pointer-events-none"
                             />
-                            {processing &&
-                                <div className="absolute z-[99999] inset-0 flex justify-center items-center">
-                                    <RiseLoader
-                                        color="rgba(255, 255, 255, 0.8)" />
-                                </div>
-                            }
-                            <img
-                                src={`/storage/${selectedBox.image_box}`}
-                                alt="box"
-                                className={`px-3 pt-4 sm:px-7 sm:pt-10 relative select-none pointer-events-none ${processing && 'blur-sm'}`}
-                            />
                         </>
                     )}
+                    <div
+                        className={`${hasAnimated ? 'ps-4 pt-8' : 'pe-2 pt-6'
+                            } transition-[padding] duration-500 ease-in-out relative z-9999 select-none pointer-events-none ${processing && 'blur-sm'
+                            }`}
+                    >
+                        <SpriteCanvas onAnimationStart={handleAnimationStart} onAnimationEnd={handleAnimationEnd} drawFrameIndex={isOpened ? 3 : 0} ref={canvasRef} imageSrc="/spritesheet.png" />
+                    </div>
 
                     <h5
                         className={`text-white absolute inset-x-0 -bottom-[14px] sm:-bottom-[3vh] font-utama text-[8px] md:text-[2vh] text-center transition-all duration-100 select-none pointer-events-none ${isOpened
@@ -133,9 +146,9 @@ export default function Box({ box, key_id, i }: BoxProps) {
                         <img loading='lazy' src={`/storage/${themes.popup_error.file}`} alt={themes.popup_error.name} className='w-full' />
                         :
                         <>
-                        <img loading='lazy' src={`/storage/${selectedBox.image_box}`} alt="box-flash.png" className='w-[80px] sm:w-[14vh] absolute top-0 end-3 sm:end-4' />
-                        <img loading='lazy' src={`/storage/${themes.popup_win.file}`} alt={themes.popup_win.name} className='w-full' />
-                    </>
+                            <img loading='lazy' src={`/storage/${selectedBox.image_box}`} alt="box-flash.png" className='w-[80px] sm:w-[14vh] absolute top-0 end-3 sm:end-4' />
+                            <img loading='lazy' src={`/storage/${themes.popup_win.file}`} alt={themes.popup_win.name} className='w-full' />
+                        </>
                     }
                     {errors.key ?
                         <div className='absolute inset-0 flex flex-col justify-center'>

@@ -16,7 +16,14 @@ use Illuminate\Support\Facades\Redirect;
 
 class HomeController extends Controller
 {
-    public function index() {
+    public function __construct()
+    {
+        $seo = 'okee';
+        return $seo;
+    }
+
+    public function index()
+    {
         if (auth()->check() && auth()->user()->role == 'ADMIN') {
             return redirect(route('admin.dashboard'));
         }
@@ -27,7 +34,8 @@ class HomeController extends Controller
         return inertia('home', $data);
     }
 
-    public function login(Request $request) {
+    public function login(Request $request)
+    {
         $request->validate(['username' => 'required']);
         $user = User::whereRole('MEMBER')->where('username', $request->username)->first();
         if (!$user) {
@@ -37,7 +45,8 @@ class HomeController extends Controller
         return to_route('home');
     }
 
-    public function claim(Request $request) {
+    public function claim(Request $request)
+    {
         $request->validate(['kode' => 'required']);
         $code = auth()->user()->codes()->where('code', $request->kode)->first();
         if (!$code) {
@@ -57,27 +66,32 @@ class HomeController extends Controller
         return back()->with('success', $code);
     }
 
-    public function getBoxes() {
+    public function getBoxes()
+    {
         $boxes = Box::all();
         return $boxes;
     }
 
-    public function getHistories() {
+    public function getHistories()
+    {
         $histories = auth()->user()->histories->load('prize');
         return $histories;
     }
 
-    public function getNineBoxes($id) {
+    public function getNineBoxes($id)
+    {
         $boxes = UserBox::where('user_id', auth()->id())->where('box_id', $id)->first();
         $userBoxes = PrizeBox::where('user_box_id', $boxes->id)->with(['prize'])->select('id', 'is_open', 'prize_id')->get();
         return $userBoxes;
     }
-    public function getPrizeList() {
+    public function getPrizeList()
+    {
         $Prizes = Prize::inRandomOrder()->get();
         return $Prizes;
     }
 
-    public function getKeys() {
+    public function getKeys()
+    {
         $userKeys = collect();
         if (auth()->check()) {
             $userKeys = UserKey::with(['key'])->where('user_id', auth()->id())->get();
@@ -91,7 +105,8 @@ class HomeController extends Controller
         return $keys;
     }
 
-    public function openBox($id, $key_id) {
+    public function openBox($id, $key_id)
+    {
         $userKey = auth()->user()->keys->where('key_id', $key_id)->first();
         if ($userKey->amount == 0) {
             return back()->withErrors(['key' => $userKey->key->image]);
