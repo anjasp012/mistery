@@ -8,6 +8,7 @@ import { SharedData } from '@/types';
 import useSound from '@/hooks/use-sound';
 import { useBoxStore } from '@/store/box-store';
 import SpriteCanvas, { SpriteCanvasRef } from '../sprite';
+import Spiner from '../spiner';
 
 type BoxProps = {
     box: any;
@@ -20,6 +21,7 @@ export default function Box({ box, key_id, i }: BoxProps) {
     const { themes } = usePage<SharedData>().props;
     const selectedBox = useBoxStore(state => state.selectedBox);
     const { playSound } = useSound([`storage/${themes.sound_click.file}`, `storage/${themes.sound_win.file}`, `storage/${themes.sound_hover.file}`, `storage/${themes.sound_empty.file}`]);
+    const [openSlide, setOpenSlide] = useState(false);
     const [open, setOpen] = useState(false);
     const { data, setData, post, processing, errors } = useForm({
         is_open: box.is_open,
@@ -51,16 +53,11 @@ export default function Box({ box, key_id, i }: BoxProps) {
     }, [data]);
 
     const openBox = () => {
-
         post(route('home.openBox', { id: box.id, key_id: key_id }), {
             preserveScroll: true,
             onSuccess: () => {
                 router.reload({ only: ['auth'] })
-                canvasRef.current?.start();
-                playSound(`storage/${themes.sound_win.file}`)
-
-
-                // setOpen(true)
+                canvasRef.current?.start()
             },
             onError: () => {
                 setOpen(true)
@@ -75,12 +72,17 @@ export default function Box({ box, key_id, i }: BoxProps) {
         setHasAnimated(true);
     };
 
-  const handleAnimationEnd = () => {
-    setTimeout(() => {
-        setData('is_open', true);
-        setOpen(true);
-    }, 300);
-};
+    const handleAnimationEnd = () => {
+        setTimeout(() => {
+            setOpenSlide(true);
+            setData('is_open', true)
+        }, 300);
+    };
+
+    const handleSpinerEnd = () => {
+        setOpen(true)
+        playSound(`storage/${themes.sound_win.file}`)
+    };
 
     return (
         <>
@@ -140,6 +142,16 @@ export default function Box({ box, key_id, i }: BoxProps) {
                     </h5>
                 </div>
             </div>
+           <Dialog open={openSlide} onOpenChange={setOpenSlide}>
+                <DialogOverlay className='bg-transparent backdrop-blur-xs' />
+                <DialogContent className='sm:max-w-7xl'>
+                    <div className="relative">
+                    <Spiner onSpinerEnd={handleSpinerEnd} setOpenSlide={setOpenSlide}/>
+                    <div className="absolute top-1/2 -translate-y-1/2 start-1/2 -translate-x-1/2 w-62 h-full border border-white"></div>
+                    </div>
+                </DialogContent>
+            </Dialog>
+
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogOverlay className='bg-transparent backdrop-blur-xs' />
                 <DialogContent className="w-[80vw] sm:max-w-[60vh] p-0 border-none [&>button:first-of-type]:hidden bg-transparent shadow-none focus:outline-none">
@@ -147,11 +159,11 @@ export default function Box({ box, key_id, i }: BoxProps) {
                         <img loading='lazy' src={`/storage/${themes.popup_error.file}`} alt={themes.popup_error.name} className='w-full' />
                         :
                         <>
-                        <div
-                            className={`w-[80px] sm:w-[18vh] transition-[padding] duration-500 ease-in-out absolute -top-2 end-0 sm:-top-3 sm:end-1 z-9999 select-none pointer-events-none`}
-                        >
-                            <SpriteCanvas drawFrameIndex={0} imageSrc={`/storage/${selectedBox.image_box}`} />
-                        </div>
+                            <div
+                                className={`w-[80px] sm:w-[18vh] transition-[padding] duration-500 ease-in-out absolute -top-2 end-0 sm:-top-3 sm:end-1 z-9999 select-none pointer-events-none`}
+                            >
+                                <SpriteCanvas drawFrameIndex={0} imageSrc={`/storage/${selectedBox.image_box}`} />
+                            </div>
                             {/* <img loading='lazy' src={`/storage/${selectedBox.image_box}`} alt="box-flash.png" className='w-[80px] sm:w-[14vh] absolute top-0 end-3 sm:end-4' /> */}
                             <img loading='lazy' src={`/storage/${themes.popup_win.file}`} alt={themes.popup_win.name} className='w-full' />
                         </>

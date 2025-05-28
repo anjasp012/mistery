@@ -9,8 +9,8 @@ import SpriteCanvas from "../sprite";
 
 export default function VoucherCard({ keys }: any[]) {
     const { auth, themes } = usePage<SharedData>().props;
-    const options: EmblaOptionsType = { loop: true }
     const historySelectedBox = useHistoryBoxStore(state => state.historySelectedBox);
+    const options: EmblaOptionsType = { loop: true }
     const [emblaRef, emblaApi] = useEmblaCarousel(options, [Autoplay()])
 
 
