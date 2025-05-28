@@ -55,7 +55,7 @@ export default function sixBoxes({ boxes }: SixBoxesProps) {
                             <img loading='lazy' src={`/storage/${themes.box_hover_card.file}`} alt={themes.box_hover_card.name} className="w-full scale-117 absolute transition-all duration-100 opacity-0 group-hover:opacity-100 select-none pointer-events-none ease-in-ease-out" />
 
                             <div
-                                className={`pe-2 pt-6 transition-[padding] duration-500 ease-in-out relative z-9999 select-none pointer-events-none`}
+                                className={`pe-1 sm:pe-2 pt-2 sm:pt-6 transition-[padding] duration-500 ease-in-out relative z-9999 select-none pointer-events-none`}
                             >
                                 <SpriteCanvas drawFrameIndex={0} imageSrc={`/storage/${box.image_box}`} />
                             </div>

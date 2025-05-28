@@ -119,7 +119,7 @@ export default function Box({ box, key_id, i }: BoxProps) {
                         </>
                     )}
                     <div
-                        className={`${hasAnimated ? 'ps-4 pt-8' : 'pe-2 pt-6'
+                        className={`${hasAnimated ? 'ps-2 pt-3 sm:ps-4 sm:pt-8' : 'pe-1 sm:pe-2 pt-2 sm:pt-6'
                             } transition-[padding] duration-500 ease-in-out relative z-9999 select-none pointer-events-none ${processing && 'blur-sm'
                             }`}
                     >
@@ -148,7 +148,7 @@ export default function Box({ box, key_id, i }: BoxProps) {
                         :
                         <>
                         <div
-                            className={`w-[80px] sm:w-[18vh] transition-[padding] duration-500 ease-in-out absolute top-0 end-3 sm:end-1 z-9999 select-none pointer-events-none`}
+                            className={`w-[80px] sm:w-[18vh] transition-[padding] duration-500 ease-in-out absolute -top-2 end-0 sm:-top-3 sm:end-1 z-9999 select-none pointer-events-none`}
                         >
                             <SpriteCanvas drawFrameIndex={0} imageSrc={`/storage/${selectedBox.image_box}`} />
                         </div>

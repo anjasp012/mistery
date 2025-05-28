@@ -67,11 +67,11 @@ export default function RightSide({ boxes, keys }: RightSideProps) {
             {selectedBox ?
                 <>
                     <div className="flex flex-col mx-auto gap-y-[1vh] sm:gap-y-[2.5vh] items-center justify-center sm:h-screen py-3 sm:py-0">
+                        <Key />
                         <div className="sm:hidden">
                             <Silahkan />
                         </div>
                         <NineBoxes />
-                        <Key />
                     </div>
                     <div className="sm:hidden text-center mt-2">
                         <KembaliButton />
