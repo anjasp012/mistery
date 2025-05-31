@@ -143,12 +143,17 @@ export default function Box({ box, key_id, i }: BoxProps) {
                     </h5>
                 </div>
             </div>
-           <Dialog open={openSlide} onOpenChange={setOpenSlide}>
+            <Dialog open={openSlide} onOpenChange={setOpenSlide}>
                 <DialogOverlay className='bg-transparent backdrop-blur-xs' />
-                <DialogContent className='sm:max-w-7xl [&>button:first-of-type]:hidden'>
-                    <div className="relative">
-                    <Spiner onSpinerEnd={handleSpinerEnd}/>
-                    <div className="absolute top-1/2 -translate-y-1/2 start-1/2 -translate-x-1/2 w-20 sm:w-62 h-full border border-white"></div>
+                <DialogContent className='sm:max-w-7xl p-0 border-none [&>button:first-of-type]:hidden bg-transparent shadow-none focus:outline-none'>
+
+                    <div className="relative rounded-[100px]">
+                        <img loading='lazy' src='/bg-spin.png' className="select-none pointer-events-none w-full" alt="box" />
+                        <div className="absolute flex my-auto inset-y-0 translate-middle-y inset-0 px-1 sm:px-2">
+                            <Spiner onSpinerEnd={handleSpinerEnd} />
+                        </div>
+                        {/* <div className="absolute top-1/2 -translate-y-1/2 start-1/2 -translate-x-1/2 w-20 sm:w-62 h-full  border-s-4 border-e-4 border-white"></div> */}
+
                     </div>
                 </DialogContent>
             </Dialog>
