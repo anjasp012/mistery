@@ -14,9 +14,14 @@ type BoxProps = {
     box: any;
     i: any;
     key_id: string;
+    prizes: {
+        id: string,
+        images: string,
+    }[]
 };
 
-export default function Box({ box, key_id, i }: BoxProps) {
+export default function Box({ prizes,box, key_id, i }: BoxProps) {
+
 
     const { themes } = usePage<SharedData>().props;
     const selectedBox = useBoxStore(state => state.selectedBox);
@@ -148,9 +153,9 @@ export default function Box({ box, key_id, i }: BoxProps) {
                 <DialogContent className='sm:max-w-7xl p-0 border-none [&>button:first-of-type]:hidden bg-transparent shadow-none focus:outline-none'>
 
                     <div className="relative rounded-[100px]">
-                        <img loading='lazy' src='/bg-spin.png' className="select-none pointer-events-none w-full" alt="box" />
+                        <img loading='lazy' src={`/storage/${themes.spiner_card.file}`} className="select-none pointer-events-none w-full" alt="box" />
                         <div className="absolute flex my-auto inset-y-0 translate-middle-y inset-0 px-1 sm:px-2">
-                            <Spiner onSpinerEnd={handleSpinerEnd} />
+                            <Spiner box={box} prizes={prizes} onSpinerEnd={handleSpinerEnd} />
                         </div>
                         {/* <div className="absolute top-1/2 -translate-y-1/2 start-1/2 -translate-x-1/2 w-20 sm:w-62 h-full  border-s-4 border-e-4 border-white"></div> */}
 

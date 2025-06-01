@@ -58,7 +58,7 @@ export default function NineBoxes() {
                                 image: null
                             }
                         })).map((box, i) => (
-                            <Box box={box} key_id={selectedBox.id} i={i} key={i} />
+                            <Box prizes={boxes} box={box} key_id={selectedBox.id} i={i} key={i} />
                         ))}
 
 

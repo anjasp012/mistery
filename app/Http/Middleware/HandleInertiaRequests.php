@@ -47,16 +47,16 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user()?->load('keys'),
             ],
-            'ziggy' => fn(): array => [
+            'ziggy' => fn (): array => [
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'flash' => [
-                'success' => fn() => $request->session()->get('success'),
-                'error' => fn() => $request->session()->get('error')
+                'success' => fn () => $request->session()->get('success'),
+                'error' => fn () => $request->session()->get('error')
             ],
-            'themes' => fn() => Cache::rememberForever('theme', function () {
+            'themes' => fn () => Cache::rememberForever('theme', function () {
                 return Theme::whereIn('slug', [
                     'sound_win',
                     'sound_empty',
@@ -83,6 +83,7 @@ class HandleInertiaRequests extends Middleware
                     'box_hover_card',
                     'claim_card',
                     'login_card',
+                    'spiner_card',
                     'info_button',
                     'history_button',
                     'claim_button',
@@ -92,7 +93,7 @@ class HandleInertiaRequests extends Middleware
                     'bg_mobile',
                     'bg_right',
                     'bg_left'
-                ])->select('slug', 'file','link', 'is_active')->get()->keyBy('slug');
+                ])->select('slug', 'file', 'link', 'is_active')->get()->keyBy('slug');
             })
 
         ];
