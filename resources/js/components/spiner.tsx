@@ -6,7 +6,20 @@ import useSound from '@/hooks/use-sound'
 import { usePage } from '@inertiajs/react'
 import { SharedData } from '@/types'
 
-export default function Spiner({ box, prizes, onSpinerEnd }) {
+type SpinerProps = {
+    box: {
+        prize: {
+            image: string
+        }
+    },
+    prizes: {
+        id: string,
+        image: string,
+    }[],
+    onSpinerEnd: void;
+};
+
+export default function Spiner({ box, prizes, onSpinerEnd }: SpinerProps) {
     const { themes } = usePage<SharedData>().props
     const { playSound } = useSound([
         `storage/${themes.sound_click.file}`,
@@ -70,30 +83,39 @@ export default function Spiner({ box, prizes, onSpinerEnd }) {
         }
     }, [emblaApi])
 
-    // Gambar asli yang ingin diulang
     const image = `/storage/${box.prize.image}`;
-    const images = prizes.map(prize => `/storage/${prize.prize.image}`);
+    console.log(image);
 
-    // Taruh `image` di index ke-6 (indeks dimulai dari 0)
-    images[6] = image;
+    const baseImages = prizes.map(prize => `/storage/${prize.image}`);
+    const insertIndex = Math.min(6, baseImages.length);
+    const imagesWithInserted = [
+        ...baseImages.slice(0, insertIndex),
+        image,
+        ...baseImages.slice(insertIndex)
+    ];
 
-    // Jumlah total slide (misalnya 23)
-    const totalSlides = 23
+    // Loop jadi total 20 elemen
+    const totalSlides = 20;
+    const images = Array.from({ length: totalSlides }, (_, i) =>
+        imagesWithInserted[i % imagesWithInserted.length]
+    );
+
+
 
     return (
         <div className="m-auto pointer-events-none select-none">
             <div className="overflow-hidden" ref={emblaRef}>
                 <div className="flex items-center">
-                    {[...Array(totalSlides)].map((_, i) => (
+                    {images.map((imgSrc, i) => (
                         <div
                             key={i}
-                            className={`flex-none w-1/3 sm:px-4 h-full sm:max-h-[450px] flex justify-center items-center my-auto`}
+                            className="flex-none w-1/3 sm:px-4 h-full sm:max-h-[450px] flex justify-center items-center my-auto"
                         >
-                            <img
-                                src={images[i % images.length]}
-                                alt={`Slide ${i + 1}`}
-                                className="w-10/12 mx-auto my-auto h-full object-contain"
-                            />
+                            {i == 6 ?
+                            <img src={`/storage/${box.prize.image}`} loading="lazy" className="w-10/12 mx-auto my-auto h-full object-contain" />
+                             :
+                            <img src={imgSrc} loading="lazy" className="w-10/12 mx-auto my-auto h-full object-contain" />
+                            }
                         </div>
                     ))}
                 </div>

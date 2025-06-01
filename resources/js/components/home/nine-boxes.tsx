@@ -8,6 +8,11 @@ import useSound from '@/hooks/use-sound';
 import { useBoxStore } from '@/store/box-store';
 import { SharedData } from '@/types';
 
+type prizesProps = {
+    id: number;
+    image: string;
+};
+
 type boxesProps = {
     id: number;
     is_open: boolean;
@@ -17,6 +22,7 @@ type boxesProps = {
 export default function NineBoxes() {
      const { themes } = usePage<SharedData>().props;
     const { playSound } = useSound([`storage/${themes.sound_show.file}`]);
+    const [prizes, setPrizes] = useState<boxesProps[]>([]);
     const [boxes, setBoxes] = useState<boxesProps[]>([]);
     const [loading, setLoading] = useState(true);
     const selectedBox = useBoxStore(state => state.selectedBox);
@@ -28,7 +34,8 @@ export default function NineBoxes() {
         fetch(`/home/getNineBoxes/${selectedBox.id}`)
             .then(response => response.json())
             .then(data => {
-                setBoxes(data);
+                setBoxes(data.userBoxes);
+                setPrizes(data.prizes);
                 setLoading(false); // selesai loading
                 playSound(`storage/${themes.sound_show.file}`)
             })
@@ -58,7 +65,7 @@ export default function NineBoxes() {
                                 image: null
                             }
                         })).map((box, i) => (
-                            <Box prizes={boxes} box={box} key_id={selectedBox.id} i={i} key={i} />
+                            <Box prizes={prizes} box={box} key_id={selectedBox.id} i={i} key={i} />
                         ))}
 
 

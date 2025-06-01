@@ -16,7 +16,7 @@ type BoxProps = {
     key_id: string;
     prizes: {
         id: string,
-        images: string,
+        image: string,
     }[]
 };
 

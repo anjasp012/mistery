@@ -82,7 +82,11 @@ class HomeController extends Controller
     {
         $boxes = UserBox::where('user_id', auth()->id())->where('box_id', $id)->first();
         $userBoxes = PrizeBox::where('user_box_id', $boxes->id)->with(['prize'])->select('id', 'is_open', 'prize_id')->get();
-        return $userBoxes;
+        $prizes = Prize::select('id', 'image')->get();
+        return [
+            'userBoxes'=>$userBoxes,
+            'prizes'=>$prizes
+        ];
     }
     public function getPrizeList()
     {
