@@ -7,6 +7,7 @@ import Box from './box';
 import useSound from '@/hooks/use-sound';
 import { useBoxStore } from '@/store/box-store';
 import { SharedData } from '@/types';
+import BoxAnimation from '@/pages/box-animation';
 
 type prizesProps = {
     id: number;
@@ -65,6 +66,7 @@ export default function NineBoxes() {
                                 image: null
                             }
                         })).map((box, i) => (
+                            // <BoxAnimation/>
                             <Box prizes={prizes} box={box} key_id={selectedBox.id} i={i} key={i} />
                         ))}
 

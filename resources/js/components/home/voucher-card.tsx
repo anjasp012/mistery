@@ -77,8 +77,8 @@ export default function VoucherCard({ keys }: any[]) {
                                                 <div className="relative">
                                                     <img loading="lazy" src={`/storage/${themes.key_card.file}`} alt={themes.key_card.name} className="w-full select-none pointer-events-none" />
                                                     <div className="flex justify-center items-center absolute inset-0 w-[70%] mx-auto my-auto">
-                                                        <img loading="lazy" data-aos="zoom-in" src={`/storage/${key.key.image}`} className="w-full select-none pointer-events-none" alt={key.key.image} />
-                                                        <div data-aos="zoom-in" className="text-[6px] sm:text-normal text-white select-none pointer-events-none">x<span className="text-[8px] sm:text-xl">{key.amount}</span></div>
+                                                        <img loading="lazy" data-aos="zoom-in" src={`/storage/${key.key.image}`} className="md:w-[20px] w-[8px] select-none pointer-events-none" alt={key.key.image} />
+                                                        <div data-aos="zoom-in" className="text-[8px] sm:text-normal text-white select-none pointer-events-none">x<span className="text-[8px] sm:text-xl">{key.amount}</span></div>
                                                     </div>
                                                 </div>
                                             </div>

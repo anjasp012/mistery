@@ -24,6 +24,7 @@ class HomeController extends Controller
 
     public function index()
     {
+
         if (auth()->check() && auth()->user()->role == 'ADMIN') {
             return redirect(route('admin.dashboard'));
         }

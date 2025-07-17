@@ -94,8 +94,7 @@ class HandleInertiaRequests extends Middleware
                     'bg_right',
                     'bg_left'
                 ])->select('slug', 'file', 'link', 'is_active')->get()->keyBy('slug');
-            })
-
+            }),
         ];
     }
 }

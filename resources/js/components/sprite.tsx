@@ -52,6 +52,7 @@ const SpriteCanvas = forwardRef<SpriteCanvasRef, SpriteCanvasProps>(
             if (!canvas || !ctx || !image) return;
 
             const dpr = window.devicePixelRatio || 1;
+
             const cssWidth = canvas.clientWidth;
             const cssHeight = canvas.clientHeight;
 
@@ -59,23 +60,30 @@ const SpriteCanvas = forwardRef<SpriteCanvasRef, SpriteCanvasProps>(
             const scaledWidth = frameWidth * scale;
             const scaledHeight = frameHeight * scale;
 
+            // ✅ Set ukuran internal canvas berdasarkan pixel density
             canvas.width = scaledWidth * dpr;
             canvas.height = scaledHeight * dpr;
+
+            // ✅ Atur transform biar semua koordinat gambar disesuaikan dengan DPI
             ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
+            // Bersihkan canvas
             ctx.clearRect(0, 0, scaledWidth, scaledHeight);
+
+            // Gambar frame tertentu dari sprite sheet
             ctx.drawImage(
                 image,
-                frame * frameWidth,
-                0,
+                frame * frameWidth, // Source X
+                0, // Source Y
                 frameWidth,
                 frameHeight,
-                0,
-                0,
+                0, // Dest X
+                0, // Dest Y
                 scaledWidth,
                 scaledHeight
             );
         };
+
 
         useEffect(() => {
             if (image && drawFrameIndex !== undefined) {
@@ -117,7 +125,7 @@ const SpriteCanvas = forwardRef<SpriteCanvasRef, SpriteCanvasProps>(
         return (
             <canvas
                 ref={canvasRef}
-                className="w-full h-full cursor-pointer select-none"
+                className="w-full h-full origin-center cursor-pointer select-none"
                 style={{ imageRendering: 'pixelated' }}
             />
         );
